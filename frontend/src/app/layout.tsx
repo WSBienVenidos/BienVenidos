@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -13,6 +14,9 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// Load HeaderAuth client component dynamically (Next will treat client component correctly)
+const HeaderAuth = dynamic(() => import("@/components/HeaderAuth"));
 
 export const metadata: Metadata = {
   title: "BienVenidos",
@@ -41,12 +45,11 @@ export default function RootLayout({
                   priority
                 />
               </Link>
-              <Link
-                className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1b3f7a] transition hover:text-[#0f2d57]"
-                href="/login"
-              >
-                Iniciar sesión
-              </Link>
+              {/* HeaderAuth is a client component; render it (dynamically imported above) */}
+              <div className="flex items-center gap-4">
+                <Link className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1b3f7a] transition hover:text-[#0f2d57]" href="/">Inicio</Link>
+                <HeaderAuth />
+              </div>
             </div>
           </header>
           <main className="mx-auto w-full max-w-6xl px-6 py-12">

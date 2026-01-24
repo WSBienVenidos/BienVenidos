@@ -34,3 +34,18 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Connecting to the backend (local dev)
+
+This frontend expects the backend API to be available and configured via the `NEXT_PUBLIC_API_URL` environment variable. An example is provided in `.env.local.example`.
+
+Set `NEXT_PUBLIC_API_URL` to `http://localhost:4000` when running the backend locally. Example:
+
+```bash
+# copy the example and edit if needed
+cp .env.local.example .env.local
+npm run dev
+```
+
+The login and signup pages will POST to `${NEXT_PUBLIC_API_URL}/api/auth/login` and `/api/auth/signup`.
+The backend sets an HttpOnly cookie (`bv_token`) on successful auth; the frontend uses cookie-based auth and does not store the JWT in `localStorage`.

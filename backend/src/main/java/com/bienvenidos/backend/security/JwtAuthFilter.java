@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,13 +29,26 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
+    // Try Authorization header first, then fall back to the HttpOnly cookie named "bv_token".
+    String token = null;
     String header = request.getHeader("Authorization");
-    if (header == null || !header.startsWith("Bearer ")) {
+    if (header != null && header.startsWith("Bearer ")) {
+      token = header.substring(7);
+    } else {
+      if (request.getCookies() != null) {
+        for (Cookie c : request.getCookies()) {
+          if ("bv_token".equals(c.getName())) {
+            token = c.getValue();
+            break;
+          }
+        }
+      }
+    }
+
+    if (token == null) {
       filterChain.doFilter(request, response);
       return;
     }
-
-    String token = header.substring(7);
     try {
       Jws<Claims> parsed = jwtService.parse(token);
       String userId = parsed.getBody().getSubject();
