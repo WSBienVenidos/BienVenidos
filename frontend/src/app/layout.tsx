@@ -47,7 +47,6 @@ export default function RootLayout({
               </Link>
               {/* HeaderAuth is a client component; render it (dynamically imported above) */}
               <div className="flex items-center gap-4">
-                <Link className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1b3f7a] transition hover:text-[#0f2d57]" href="/">Inicio</Link>
                 <HeaderAuth />
               </div>
             </div>
