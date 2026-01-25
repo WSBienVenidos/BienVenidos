@@ -52,8 +52,10 @@ public class SecurityConfig {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowedOrigins(List.of(allowedOrigin));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-    config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-    config.setAllowCredentials(false);
+  // Allow common headers plus cookie-related headers so the frontend can send/receive HttpOnly cookies
+  config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cookie", "Set-Cookie", "Accept"));
+  // Allow credentials for cookie auth
+  config.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", config);

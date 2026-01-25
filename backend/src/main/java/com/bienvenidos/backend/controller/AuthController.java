@@ -9,6 +9,7 @@ import com.bienvenidos.backend.security.JwtService;
 import com.bienvenidos.backend.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,14 +32,46 @@ public class AuthController {
 
   @PostMapping("/signup")
   public ResponseEntity<AuthResponses.AuthTokenResponse> signup(@Valid @RequestBody AuthRequests.SignupRequest req) {
-    String token = authService.signup(req);
-    return ResponseEntity.ok(new AuthResponses.AuthTokenResponse(token, "Bearer", jwtService.getExpirationSeconds()));
+  String token = authService.signup(req);
+  ResponseCookie cookie = ResponseCookie.from("bv_token", token)
+    .httpOnly(true)
+    .secure(false)
+    .path("/")
+    .maxAge(jwtService.getExpirationSeconds())
+    .sameSite("Lax")
+    .build();
+
+  return ResponseEntity.ok()
+    .header("Set-Cookie", cookie.toString())
+    .body(new AuthResponses.AuthTokenResponse(token, "Bearer", jwtService.getExpirationSeconds()));
   }
 
   @PostMapping("/login")
   public ResponseEntity<AuthResponses.AuthTokenResponse> login(@Valid @RequestBody AuthRequests.LoginRequest req) {
-    String token = authService.login(req);
-    return ResponseEntity.ok(new AuthResponses.AuthTokenResponse(token, "Bearer", jwtService.getExpirationSeconds()));
+  String token = authService.login(req);
+  ResponseCookie cookie = ResponseCookie.from("bv_token", token)
+    .httpOnly(true)
+    .secure(false)
+    .path("/")
+    .maxAge(jwtService.getExpirationSeconds())
+    .sameSite("Lax")
+    .build();
+
+  return ResponseEntity.ok()
+    .header("Set-Cookie", cookie.toString())
+    .body(new AuthResponses.AuthTokenResponse(token, "Bearer", jwtService.getExpirationSeconds()));
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<?> logout() {
+  ResponseCookie cookie = ResponseCookie.from("bv_token", "")
+    .httpOnly(true)
+    .secure(false)
+    .path("/")
+    .maxAge(0)
+    .sameSite("Lax")
+    .build();
+  return ResponseEntity.ok().header("Set-Cookie", cookie.toString()).body(Map.of("ok", true));
   }
 
   @GetMapping("/me")
