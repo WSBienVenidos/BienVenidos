@@ -1,5 +1,7 @@
 "use client";
 
+"use client";
+
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -54,15 +56,9 @@ export default function SignInPage() {
     <div className="flex min-h-[70vh] items-center justify-center">
       <div className="w-full max-w-md rounded-[32px] border border-[#f4d3b2] bg-white p-8 shadow-[0_25px_80px_-50px_rgba(228,82,140,0.35)]">
         <div className="space-y-3">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b3f7a]/70">
-            BienVenidos
-          </p>
-          <h1 className="text-3xl font-semibold text-[#12376c]">
-            Crear cuenta
-          </h1>
-          <p className="text-sm text-[#1b3f7a]/70">
-            Registro simple para unirte a la comunidad con invitación.
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b3f7a]/70">BienVenidos</p>
+          <h1 className="text-3xl font-semibold text-[#12376c]">Crear cuenta</h1>
+          <p className="text-sm text-[#1b3f7a]/70">Registro simple para unirte a la comunidad con invitación.</p>
         </div>
 
         <form className="mt-8 space-y-4" onSubmit={(e) => e.preventDefault()}>
@@ -119,14 +115,8 @@ export default function SignInPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-sm text-[#1b3f7a]/70">
-          ¿Ya tienes acceso?{" "}
-          <Link
-            className="font-semibold text-[#1aa1d5] hover:text-[#1693c2]"
-            href="/login"
-          >
-            Iniciar sesión
-          </Link>
+        <p className="mt-6 text-sm text-[#1b3f7a]/70">¿Ya tienes acceso?{' '}
+          <Link className="font-semibold text-[#1aa1d5] hover:text-[#1693c2]" href="/login">Iniciar sesión</Link>
         </p>
       </div>
     </div>
