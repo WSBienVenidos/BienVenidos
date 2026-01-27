@@ -50,7 +50,12 @@ public class SecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(List.of(allowedOrigin));
+    List<String> origins = List.of(allowedOrigin.split(","))
+        .stream()
+        .map(String::trim)
+        .filter(s -> !s.isEmpty())
+        .toList();
+    config.setAllowedOrigins(origins);
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
   // Allow common headers plus cookie-related headers so the frontend can send/receive HttpOnly cookies
   config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cookie", "Set-Cookie", "Accept"));
