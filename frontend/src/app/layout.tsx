@@ -57,11 +57,11 @@ export default function RootLayout({
             </main>
           </div>
           <footer className="relative mt-auto border-t border-[#f4d3b2] bg-white py-8 text-sm text-[#1b3f7a]/70">
-            <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-6 px-6 sm:flex-row sm:items-start">
+            <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row sm:items-center">
               <span className="text-center text-xs font-medium text-[#1b3f7a]/60 sm:text-left">
                 © 2026 BienVenidos. Todos los derechos reservados.
               </span>
-              <div className="relative flex flex-col gap-3 text-center sm:text-right">
+              <div className="relative flex flex-col items-center gap-2 text-center sm:items-end sm:text-right">
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#1b3f7a]/50">
                   Confianza
                 </p>

@@ -12,6 +12,7 @@ export default function SignInPage() {
 
   const router = useRouter();
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [inviteCode, setInviteCode] = useState("");
@@ -80,6 +81,18 @@ export default function SignInPage() {
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
               placeholder="ana@bienvenidos.com"
               type="email"
+              autoComplete="email"
+            />
+          </label>
+          <label className="block text-sm text-[#1b3f7a]">
+            Número de teléfono
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
+              placeholder="+1 801 555 1234"
+              type="tel"
+              autoComplete="tel"
             />
           </label>
           <label className="block text-sm text-[#1b3f7a]">
@@ -90,6 +103,7 @@ export default function SignInPage() {
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
               placeholder="••••••••"
               type="password"
+              autoComplete="new-password"
             />
           </label>
           <label className="block text-sm text-[#1b3f7a]">
