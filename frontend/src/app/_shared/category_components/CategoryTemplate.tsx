@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
-import type { Category, Resource } from "../_data";
+import type { Category, Resource } from "../category_data";
 
-const placeholderImage = "Picture";
+const mapSearchUrl = (address: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 
 type CategoryTemplateProps = {
   category: Category;
@@ -38,20 +40,44 @@ export default function CategoryTemplate({ category, resources }: CategoryTempla
               key={resource.id}
               className="flex gap-4 rounded-[26px] border border-[#e6dccf] bg-white/80 p-5"
             >
-              <div className="grid h-20 w-20 flex-shrink-0 place-items-center rounded-2xl border border-[#e6dccf] bg-white/70 text-xs font-semibold text-[#1b3f7a]/50">
-                {placeholderImage}
+              <div className="grid h-20 w-20 flex-shrink-0 place-items-center overflow-hidden rounded-2xl border border-[#e6dccf] bg-white/70">
+                {resource.image ? (
+                  <Image
+                    src={resource.image}
+                    alt={resource.imageAlt ?? resource.title}
+                    className="h-20 w-20 object-cover"
+                  />
+                ) : null}
               </div>
               <div className="flex-1">
-                <div className="text-lg font-semibold text-[#12376c]">
-                  {resource.title}
-                </div>
+                {resource.website ? (
+                  <a
+                    href={resource.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-lg font-semibold text-[#12376c] underline decoration-[#f28c28]/60 underline-offset-4 transition hover:text-[#f28c28]"
+                  >
+                    {resource.title}
+                  </a>
+                ) : (
+                  <div className="text-lg font-semibold text-[#12376c]">
+                    {resource.title}
+                  </div>
+                )}
                 <p className="mt-1 text-sm text-[#1b3f7a]/70">
                   {resource.description}
                 </p>
                 <div className="mt-2 text-sm text-[#1b3f7a]/75">
                   <div>
                     <span className="font-semibold text-[#12376c]">Dirección:</span>{" "}
-                    {resource.address}
+                    <a
+                      href={mapSearchUrl(resource.address)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline decoration-[#f28c28]/60 underline-offset-4 transition hover:text-[#f28c28]"
+                    >
+                      {resource.address}
+                    </a>
                   </div>
                   <div>
                     <span className="font-semibold text-[#12376c]">Teléfono:</span>{" "}

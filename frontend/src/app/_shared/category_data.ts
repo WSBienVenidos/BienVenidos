@@ -15,12 +15,26 @@ export type Category = {
   href: string;
 };
 
+import type { StaticImageData } from "next/image";
+import foodbankImage from "../alimentos/foodbank.jpg";
+import tabithaswayImage from "../alimentos/tabithasway.jpeg";
+import emmanuelImage from "../alimentos/emanuel.jpeg";
+import bishopImage from "../vivienda/bishop.png";
+import homelessImage from "../vivienda/homeless.jpeg";
+import lowcostImage from "../vivienda/lowcost.png";
+import immigrationImage from "../asesoria_legal/immigration.png";
+import legalImage from "../asesoria_legal/legal.jpg";
+import lowcostLegalImage from "../asesoria_legal/lowcost.jpeg";
+
 export type Resource = {
   id: string;
   title: string;
   description: string;
   address: string;
   phone: string;
+  website?: string;
+  image?: StaticImageData;
+  imageAlt?: string;
 };
 
 export const CATEGORIES: Category[] = [
@@ -114,70 +128,108 @@ export const RESOURCES_BY_CATEGORY: Record<string, Resource[]> = {
   alimentos: [
     {
       id: "alimentos-1",
-      title: "Banco de Alimentos Comunitario",
-      description: "Despensa semanal y orientación para nuevos residentes.",
-      address: "South Jordan, UT",
-      phone: "(801) 555-0123",
+      title: "Utah Food Bank",
+      description:
+        "El banco de alimentos más grande de Utah. Provee comida gratuita a familias e individuos a través de despensas comunitarias, iglesias y organizaciones locales. No se requiere estatus migratorio y muchos centros atienden en español.",
+      address: "3150 S 900 W, South Salt Lake, UT 84119",
+      phone: "(801) 978-2452",
+      website: "https://www.utahfoodbank.org",
+      image: foodbankImage,
+      imageAlt: "Edificio de Utah Food Bank en Salt Lake City",
     },
     {
       id: "alimentos-2",
-      title: "Despensa Móvil",
-      description: "Entrega de alimentos en barrios cercanos.",
-      address: "West Jordan, UT",
-      phone: "(801) 555-0188",
+      title:
+        "Catholic Community Services of Utah – Programa St. Vincent de Paul (Tabitha’s Way)",
+      description:
+        "Ofrece asistencia alimentaria de emergencia, incluyendo despensas de comida, para familias de bajos recursos. Atienden a personas sin importar su estatus migratorio y trabajan estrechamente con comunidades latinas. Tabitha’s Way opera varias despensas en Utah County y trabaja en coordinación con Catholic Community Services.",
+      address: "675 W. Garden Drive, #100, Pleasant Grove, UT 84062",
+      phone: "(801) 692-1881",
+      website: "https://www.tabithasway.org",
+      image: tabithaswayImage,
+      imageAlt: "Entrada de Tabitha’s Way Food Pantry",
     },
     {
       id: "alimentos-3",
-      title: "Cocina Solidaria",
-      description: "Comidas calientes en días específicos.",
-      address: "Salt Lake City, UT",
-      phone: "(801) 555-0144",
+      title: "Emmanuel Worship Center – Banco de Alimentos Comunitario",
+      description:
+        "Iglesia comunitaria que ofrece distribución de alimentos gratuitos en días específicos. Es un espacio seguro y confiable para familias inmigrantes, con personal y voluntarios que hablan español.",
+      address: "1078 S 250 E, Provo, UT, United States, Utah",
+      phone: "(801) 722-8345",
+      website: "https://www.facebook.com/iglesiaemanuelfoodpantry/",
+      image: emmanuelImage,
+      imageAlt: "Fachada de Emmanuel Worship Center",
     },
   ],
   vivienda: [
     {
       id: "vivienda-1",
-      title: "Centro de Vivienda Accesible",
-      description: "Listas de renta y apoyo para encontrar cuarto.",
-      address: "Draper, UT",
-      phone: "(801) 555-0102",
+      title: "Bishop Weigand Resource Center (Catholic Community Services)",
+      description:
+        "Refugio diurno y recursos: administración de casos, almacenamiento, higiene, duchas, ayuda para vivienda, salud, empleo y formularios.",
+      address: "437 West 200 South, Salt Lake City, UT 84101",
+      phone: "(801) 363-7710",
+      website: "https://www.ccsutah.org/programs/weigand-resource-center",
+      image: bishopImage,
+      imageAlt: "Bishop Weigand Resource Center",
     },
     {
       id: "vivienda-2",
-      title: "Asesoría de Arrendamiento",
-      description: "Derechos del inquilino y contratos.",
-      address: "Lehi, UT",
-      phone: "(801) 555-0199",
+      title: "Homeless Recovery Program (Family Promise - Salt Lake)",
+      description:
+        "Refugio y red de apoyo para familias con niños; ayuda con vivienda, transporte, comidas y educación financiera.",
+      address: "814 West 800 South, Salt Lake City, UT 84104",
+      phone: "(801) 961-8622",
+      website: "https://familypromisesaltlake.org",
+      image: homelessImage,
+      imageAlt: "Family Promise - Salt Lake",
     },
     {
       id: "vivienda-3",
-      title: "Red de Hospedaje Temporal",
-      description: "Opciones de estadía de corto plazo.",
-      address: "Sandy, UT",
-      phone: "(801) 555-0160",
+      title:
+        "Low Cost for Sale Homes/Housing Units (Community Development Corporation of Utah)",
+      description:
+        "Listas y venta de viviendas de bajo costo para individuos o familias en necesidad. Varía por listado y nivel de ingresos.",
+      address: "501 East 1700 South, Salt Lake City, UT 84105",
+      phone: "(801) 994-7222",
+      website: "https://cdcutah.org",
+      image: lowcostImage,
+      imageAlt: "Community Development Corporation of Utah",
     },
   ],
   asesoria_legal: [
     {
       id: "asesoria-1",
-      title: "Orientación Legal Básica",
-      description: "Consultas generales (no inmigración).",
-      address: "Provo, UT",
-      phone: "(801) 555-0117",
+      title: "Immigration Program (Catholic Community Services - CCS)",
+      description:
+        "Representación legal para inmigrantes y refugiados; ayuda con solicitudes de estatus migratorio, formularios y asesoría.",
+      address: "745 East 300 South, Salt Lake City, UT 84102",
+      phone: "(801) 977-9119",
+      website: "https://ccsutah.org/programs/immigration",
+      image: immigrationImage,
+      imageAlt: "Catholic Community Services Immigration Program",
     },
     {
       id: "asesoria-2",
-      title: "Clínica Legal Comunitaria",
-      description: "Revisión de contratos y consumo.",
-      address: "Orem, UT",
-      phone: "(801) 555-0171",
+      title: "Legal Immigration Program (Holy Cross Ministries - HCM)",
+      description:
+        "Servicios legales de inmigración a bajo costo; ayuda con formularios, ciudadanía y representación.",
+      address: "860 East 4500 South, Salt Lake City, UT 84107",
+      phone: "(801) 261-3440",
+      website: "https://www.hcmutah.org/legal-immigration-program/",
+      image: legalImage,
+      imageAlt: "Holy Cross Ministries Legal Immigration Program",
     },
     {
       id: "asesoria-3",
-      title: "Línea de Derechos del Inquilino",
-      description: "Preguntas frecuentes y referencias.",
+      title: "Low Cost Immigration Services (Comunidades Unidas)",
+      description:
+        "Servicios de inmigración a bajo costo con representantes certificados por el DOJ; ayuda con formularios y trámites.",
       address: "Salt Lake City, UT",
-      phone: "(801) 555-0128",
+      phone: "(801) 487-4143",
+      website: "https://www.cuutah.org/es",
+      image: lowcostLegalImage,
+      imageAlt: "Comunidades Unidas Low Cost Immigration Services",
     },
   ],
   transporte: [
