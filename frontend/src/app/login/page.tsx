@@ -23,7 +23,7 @@ export default function LoginPage() {
       const res = await api.login(email, password);
       // The backend sets an HttpOnly cookie; we rely on cookie-based auth now.
       try { await api.me(); } catch {}
-      router.push("/");
+      router.push("/users");
     } catch (err: any) {
       if (err?.body?.error) setError(err.body.error);
       else setError("Login failed");
