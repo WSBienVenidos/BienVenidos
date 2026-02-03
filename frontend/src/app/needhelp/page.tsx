@@ -24,7 +24,7 @@ type CategoryKey =
   | "un_amigo"
   | "doctor"
   | "telefono_movil"
-  | "trabalho"
+  | "trabajo"
   | "cuenta_bancaria"
   | "ropa_muebles"
   | "iglesia";
