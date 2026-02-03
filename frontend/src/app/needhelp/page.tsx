@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 
 /**
@@ -50,7 +51,7 @@ const CATEGORIES: Category[] = [
   { key: "iglesia", title: "Iglesia", tone: "pink" },
 ];
 
-const CATEGORY_ICONS: Record<CategoryKey, JSX.Element> = {
+const CATEGORY_ICONS: Record<CategoryKey, ReactNode> = {
   alimentos: (
     <svg
       fill="#ff943d"
