@@ -24,7 +24,24 @@ export default function UsersPage() {
   // Design-only placeholders (edit freely)
   const email = "test1@gmail.com";
   const displayName = titleCase("rosa");
-  const inviteCode = "INV-8D2K";
+  const inviteLink = "https://bienvenidos.example/invite/PLACEHOLDER";
+
+  function handleInvite() {
+    const recipient = window.prompt("Correo de la persona a invitar:");
+    if (!recipient) return;
+    const subject = "Invitación a BienVenidos";
+    const body = [
+      "Hola,",
+      "",
+      "Te invito a unirte a BienVenidos.",
+      `Enlace: ${inviteLink}`,
+      "",
+      "¡Nos vemos pronto!",
+    ].join("\n");
+
+    const params = new URLSearchParams({ subject, body });
+    window.location.href = `mailto:${recipient}?${params.toString()}`;
+  }
 
   return (
     <div className="w-full">
@@ -58,13 +75,22 @@ export default function UsersPage() {
               </p>
             </div>
 
-            <div className="w-full max-w-xs rounded-2xl border border-[#f4d3b2] bg-[#fff6ec] p-5">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#1b3f7a]/60">
-                Código de invitación
-              </div>
-              <div className="mt-2 text-2xl font-semibold tracking-[0.25em] text-[#12376c]">
-                {inviteCode}
-              </div>
+            <div className="w-full max-w-xs">
+              <button
+                type="button"
+                onClick={handleInvite}
+                className="w-full rounded-2xl border border-[#f4d3b2] bg-[#fff6ec] p-5 text-left transition hover:-translate-y-0.5 hover:border-[#f28c28]"
+              >
+                <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#1b3f7a]/60">
+                  Invitaciones
+                </div>
+                <div className="mt-2 text-2xl font-semibold text-[#12376c]">
+                  Enviar invitación
+                </div>
+                <p className="mt-2 text-sm text-[#1b3f7a]/70">
+                  Abre tu correo con un enlace de invitación.
+                </p>
+              </button>
             </div>
           </div>
         </div>

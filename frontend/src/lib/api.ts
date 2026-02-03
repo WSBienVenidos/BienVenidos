@@ -1,6 +1,6 @@
 // Lightweight API helper for auth
 // Declare `process` so TypeScript in the frontend bundle does not complain.
-declare const process: any;
+declare const process: { env?: { NEXT_PUBLIC_API_URL?: string } };
 const API_BASE = process?.env?.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 type TokenResponse = {
@@ -15,57 +15,64 @@ type UserResponse = {
   createdAt: string;
 };
 
-async function postJson(path: string, body: unknown, useCredentials = true) {
+export type ApiError = {
+  status: number;
+  body: unknown;
+};
+
+type LogoutResponse = {
+  ok: boolean;
+};
+
+async function postJson<T>(path: string, body: unknown, useCredentials = true): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
-    credentials: useCredentials ? 'include' : 'same-origin',
+    credentials: useCredentials ? "include" : "same-origin",
   });
   const text = await res.text();
-  let json: any = null;
+  let json: unknown = null;
   try {
     json = text ? JSON.parse(text) : null;
   } catch {
     // ignore parse error
   }
-  if (!res.ok) throw { status: res.status, body: json };
-  return json;
-}
-
-async function getJson(path: string, token?: string) {
-  const headers: Record<string, string> = {};
-  if (token) headers["Authorization"] = `Bearer ${token}`;
-  const res = await fetch(`${API_BASE}${path}`, { headers });
-  const text = await res.text();
-  let json: any = null;
-  try { json = text ? JSON.parse(text) : null; } catch {}
-  if (!res.ok) throw { status: res.status, body: json };
-  return json;
+  if (!res.ok) throw { status: res.status, body: json } as ApiError;
+  return json as T;
 }
 
 export async function signup(email: string, password: string): Promise<TokenResponse> {
-  return postJson('/api/auth/signup', { email, password });
+  return postJson<TokenResponse>("/api/auth/signup", { email, password });
 }
 
 export async function login(email: string, password: string): Promise<TokenResponse> {
-  return postJson('/api/auth/login', { email, password });
+  return postJson<TokenResponse>("/api/auth/login", { email, password });
 }
 
 export async function me(): Promise<UserResponse> {
   // Cookie-based auth: rely on credentials to include the HttpOnly cookie
-  const res = await fetch(`${API_BASE}/api/auth/me`, { credentials: 'include' });
+  const res = await fetch(`${API_BASE}/api/auth/me`, { credentials: "include" });
   const text = await res.text();
-  let json: any = null;
-  try { json = text ? JSON.parse(text) : null; } catch {}
-  if (!res.ok) throw { status: res.status, body: json };
-  return json;
+  let json: unknown = null;
+  try {
+    json = text ? JSON.parse(text) : null;
+  } catch {
+    // ignore parse error
+  }
+  if (!res.ok) throw { status: res.status, body: json } as ApiError;
+  return json as UserResponse;
 }
 
-export async function logout(): Promise<any> {
-  const res = await fetch(`${API_BASE}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+export async function logout(): Promise<LogoutResponse | null> {
+  const res = await fetch(`${API_BASE}/api/auth/logout`, { method: "POST", credentials: "include" });
   const text = await res.text();
-  try { return text ? JSON.parse(text) : null; } catch { return null; }
+  try {
+    return text ? (JSON.parse(text) as LogoutResponse) : null;
+  } catch {
+    return null;
+  }
 }
 
-export default { signup, login, me, logout };
+const api = { signup, login, me, logout };
+export default api;

@@ -16,7 +16,6 @@ export default function SignInPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -119,17 +118,6 @@ export default function SignInPage() {
               autoComplete="new-password"
             />
           </label>
-          <label className="block text-sm text-[#1b3f7a]">
-            Código de invitación
-            <input
-              value={inviteCode}
-              onChange={(e) => setInviteCode(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
-              placeholder="INV-2026"
-              type="text"
-            />
-          </label>
-
           {error && <p className="text-sm text-red-600">{error}</p>}
 
           <button

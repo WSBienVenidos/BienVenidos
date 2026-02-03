@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import api from "@/lib/api";
+import api, { type ApiError } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,13 +20,20 @@ export default function LoginPage() {
     }
     setLoading(true);
     try {
-      const res = await api.login(email, password);
+      await api.login(email, password);
       // The backend sets an HttpOnly cookie; we rely on cookie-based auth now.
       try { await api.me(); } catch {}
       router.push("/users");
-    } catch (err: any) {
-      if (err?.body?.error) setError(err.body.error);
-      else setError("Login failed");
+    } catch (err) {
+      const apiError = err as ApiError;
+      if (apiError?.body && typeof apiError.body === "object" && "error" in apiError.body) {
+        const message = (apiError.body as { error?: string }).error;
+        if (message) {
+          setError(message);
+          return;
+        }
+      }
+      setError("Login failed");
     } finally { setLoading(false); }
   }
 
