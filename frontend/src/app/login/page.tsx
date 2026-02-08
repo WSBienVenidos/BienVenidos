@@ -65,7 +65,7 @@ export default function LoginPage() {
         </div>
 
         <p className="mt-6 text-sm text-[#1b3f7a]/70">¿No tienes cuenta?{' '}
-          <Link className="font-semibold text-[#e4528c] hover:text-[#c93f75]" href="/sign-in">Crear cuenta</Link>
+          <Link className="font-semibold text-[#e4528c] hover:text-[#c93f75]" href="/sign-up">Crear cuenta</Link>
         </p>
       </div>
     </div>
