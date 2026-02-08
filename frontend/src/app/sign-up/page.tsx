@@ -11,10 +11,11 @@ export default function SignInPage() {
   // Initialize state variables for BACK END
 
   const router = useRouter();
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,13 +64,25 @@ export default function SignInPage() {
 
         <form className="mt-8 space-y-4" onSubmit={(e) => e.preventDefault()}>
           <label className="block text-sm text-[#1b3f7a]">
-            Nombre completo
+            Nombre
             <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
-              placeholder="Ana Rodríguez"
+              placeholder="Ana"
               type="text"
+              autoComplete="given-name"
+            />
+          </label>
+          <label className="block text-sm text-[#1b3f7a]">
+            Apellido
+            <input
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
+              placeholder="Rodríguez"
+              type="text"
+              autoComplete="family-name"
             />
           </label>
           <label className="block text-sm text-[#1b3f7a]">
@@ -80,6 +93,18 @@ export default function SignInPage() {
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
               placeholder="ana@bienvenidos.com"
               type="email"
+              autoComplete="email"
+            />
+          </label>
+          <label className="block text-sm text-[#1b3f7a]">
+            Número de teléfono
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
+              placeholder="+1 801 555 1234"
+              type="tel"
+              autoComplete="tel"
             />
           </label>
           <label className="block text-sm text-[#1b3f7a]">
@@ -90,19 +115,9 @@ export default function SignInPage() {
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
               placeholder="••••••••"
               type="password"
+              autoComplete="new-password"
             />
           </label>
-          <label className="block text-sm text-[#1b3f7a]">
-            Código de invitación
-            <input
-              value={inviteCode}
-              onChange={(e) => setInviteCode(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
-              placeholder="INV-2026"
-              type="text"
-            />
-          </label>
-
           {error && <p className="text-sm text-red-600">{error}</p>}
 
           <button

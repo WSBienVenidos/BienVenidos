@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Local dev: use H2 + dev profile
-export JWT_SECRET="${JWT_SECRET:-73a84bc8-3027-40da-adf1-f767800a7116}"
-export SPRING_PROFILES_ACTIVE=dev
+# Load env file if present
+if [ -f .env ]; then
+  set -a
+  # shellcheck disable=SC1091
+  source .env
+  set +a
+fi
 
 mvn spring-boot:run
