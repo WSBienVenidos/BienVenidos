@@ -32,16 +32,17 @@ public class SecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter, com.bienvenidos.backend.security.CustomAuthenticationEntryPoint authenticationEntryPoint) throws Exception {
     http
         .csrf(csrf -> csrf.disable())
         .cors(cors -> {})
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/health").permitAll()
-            .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll()
+            .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/auth/verify-email").permitAll()
             .anyRequest().authenticated()
         )
+        .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
