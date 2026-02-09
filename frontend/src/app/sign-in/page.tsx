@@ -48,6 +48,8 @@ export default function SignInPage() {
           email,
           phone: phone.replace(/\D/g, ""),
           password,
+          firstName,
+          lastName,
         }),
       });
 

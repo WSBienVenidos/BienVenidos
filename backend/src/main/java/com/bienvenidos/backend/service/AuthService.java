@@ -47,6 +47,8 @@ public class AuthService {
     AppUser u = new AppUser();
     u.setEmail(req.email().trim().toLowerCase());
     u.setPhone(req.phone().replaceAll("[^0-9]", "").trim());
+    u.setFirstName(req.firstName() != null ? req.firstName().trim() : "");
+    u.setLastName(req.lastName() != null ? req.lastName().trim() : "");
     u.setPasswordHash(encoder.encode(req.password()));
     u.setEmailVerified(false);
     

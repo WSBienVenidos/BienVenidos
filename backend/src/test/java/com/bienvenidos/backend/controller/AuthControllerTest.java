@@ -55,7 +55,9 @@ public class AuthControllerTest {
     AuthRequests.SignupRequest request = new AuthRequests.SignupRequest(
         "newuser@example.com",
         "18015551234",
-        "Password123!"
+        "Password123!",
+        "John",
+        "Doe"
     );
 
     // Act & Assert
@@ -90,7 +92,9 @@ public class AuthControllerTest {
     AuthRequests.SignupRequest request = new AuthRequests.SignupRequest(
         "duplicate@example.com",
         "18015551111",
-        "AnotherPassword123!"
+        "AnotherPassword123!",
+        "Jane",
+        "Smith"
     );
 
     mockMvc.perform(post("/api/auth/signup")
@@ -106,7 +110,9 @@ public class AuthControllerTest {
     AuthRequests.SignupRequest request = new AuthRequests.SignupRequest(
         "not-an-email",
         "18015551234",
-        "Password123!"
+        "Password123!",
+        "Test",
+        "User"
     );
 
     // Act & Assert
@@ -123,7 +129,9 @@ public class AuthControllerTest {
     AuthRequests.SignupRequest request = new AuthRequests.SignupRequest(
         "user@example.com",
         "18015551234",
-        "Short1!"  // Only 7 chars
+        "Short1!",  // Only 7 chars
+        "Test",
+        "User"
     );
 
     // Act & Assert
@@ -140,7 +148,9 @@ public class AuthControllerTest {
     AuthRequests.SignupRequest request = new AuthRequests.SignupRequest(
         "phoneuser@example.com",
         "18015551234",
-        "Password123!"
+        "Password123!",
+        "Phone",
+        "User"
     );
 
     // Act & Assert
@@ -167,7 +177,9 @@ public class AuthControllerTest {
     AuthRequests.SignupRequest request = new AuthRequests.SignupRequest(
         "user@example.com",
         "123",
-        "Password123!"
+        "Password123!",
+        "Invalid",
+        "Phone"
     );
 
     // Act & Assert
@@ -184,7 +196,9 @@ public class AuthControllerTest {
     AuthRequests.SignupRequest request = new AuthRequests.SignupRequest(
         null,
         null,
-        "Password123!"
+        "Password123!",
+        "No",
+        "Credentials"
     );
 
     // Act & Assert

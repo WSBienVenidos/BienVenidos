@@ -19,6 +19,12 @@ public class AppUser {
   @Column(nullable = false, unique = true)
   private String phone;
 
+  @Column(name = "first_name", nullable = true)
+  private String firstName;
+
+  @Column(name = "last_name", nullable = true)
+  private String lastName;
+
   @Column(name = "password_hash", nullable = false)
   private String passwordHash;
 
@@ -48,6 +54,12 @@ public class AppUser {
 
   public String getPhone() { return phone; }
   public void setPhone(String phone) { this.phone = phone; }
+
+  public String getFirstName() { return firstName; }
+  public void setFirstName(String firstName) { this.firstName = firstName; }
+
+  public String getLastName() { return lastName; }
+  public void setLastName(String lastName) { this.lastName = lastName; }
 
   public String getPasswordHash() { return passwordHash; }
   public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
