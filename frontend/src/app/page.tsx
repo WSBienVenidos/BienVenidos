@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col gap-0">
@@ -21,7 +23,10 @@ export default function Home() {
           </div>
 
           <div className="grid auto-rows-[150px] gap-6 md:grid-cols-4 md:auto-rows-[170px]">
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff7ef] via-[#fff2e6] to-[#fff9f2] p-6 shadow-[0_25px_60px_-45px_rgba(26,161,213,0.45)] transition hover:-translate-y-1">
+          <Link
+            href="/alimentos"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff7ef] via-[#fff2e6] to-[#fff9f2] p-6 shadow-[0_25px_60px_-45px_rgba(26,161,213,0.45)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#ffe2c5]">
                 <svg
@@ -49,9 +54,12 @@ export default function Home() {
             <h2 className="text-2xl font-semibold text-[#12376c]">
               Alimentos
             </h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff6e8] via-[#fff1d8] to-[#fff9ef] p-6 shadow-[0_22px_45px_-40px_rgba(242,140,40,0.4)] transition hover:-translate-y-1">
+          <Link
+            href="/vivienda"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff6e8] via-[#fff1d8] to-[#fff9ef] p-6 shadow-[0_22px_45px_-40px_rgba(242,140,40,0.4)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#fdeac9]">
                 <svg
@@ -75,9 +83,12 @@ export default function Home() {
               </span>
             </div>
             <h2 className="text-2xl font-semibold text-[#12376c]">Vivienda</h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#e9d6f0] bg-gradient-to-br from-[#fff7fb] via-[#fff2f9] to-[#f7eefe] p-6 shadow-[0_20px_45px_-40px_rgba(153,82,170,0.35)] transition hover:-translate-y-1">
+          <Link
+            href="/asesoria_legal"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#e9d6f0] bg-gradient-to-br from-[#fff7fb] via-[#fff2f9] to-[#f7eefe] p-6 shadow-[0_20px_45px_-40px_rgba(153,82,170,0.35)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#f6dff4]">
                 <svg
@@ -103,9 +114,12 @@ export default function Home() {
             <h2 className="text-2xl font-semibold text-[#12376c]">
               Asesoria legal
             </h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#cfe5ec] bg-gradient-to-br from-[#f3fbfd] via-[#e8f6fa] to-[#f7fbff] p-6 shadow-[0_20px_45px_-40px_rgba(26,161,213,0.35)] transition hover:-translate-y-1">
+          <Link
+            href="/transporte"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#cfe5ec] bg-gradient-to-br from-[#f3fbfd] via-[#e8f6fa] to-[#f7fbff] p-6 shadow-[0_20px_45px_-40px_rgba(26,161,213,0.35)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#dff1f7]">
                 <svg
@@ -201,9 +215,12 @@ export default function Home() {
             <h2 className="text-2xl font-semibold text-[#12376c]">
               Transporte
             </h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff7ef] via-[#ffeede] to-[#fff9f2] p-6 shadow-[0_20px_45px_-40px_rgba(242,140,40,0.35)] transition hover:-translate-y-1">
+          <Link
+            href="/escuela"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff7ef] via-[#ffeede] to-[#fff9f2] p-6 shadow-[0_20px_45px_-40px_rgba(242,140,40,0.35)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#ffe2c5]">
                 <svg
@@ -234,9 +251,12 @@ export default function Home() {
               </span>
             </div>
             <h2 className="text-2xl font-semibold text-[#12376c]">Escuela</h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff] via-[#fff5ea] to-[#f3fbff] p-6 shadow-[0_20px_50px_-42px_rgba(26,161,213,0.35)] transition hover:-translate-y-1">
+          <Link
+            href="/un_amigo"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff] via-[#fff5ea] to-[#f3fbff] p-6 shadow-[0_20px_50px_-42px_rgba(26,161,213,0.35)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#e5f3ff]">
                 <svg
@@ -255,9 +275,12 @@ export default function Home() {
             <h2 className="text-2xl font-semibold text-[#12376c]">
               Un amigo
             </h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#e5efd9] bg-gradient-to-br from-[#f4fbf1] via-[#eaf6e6] to-[#f8fcf6] p-6 shadow-[0_20px_45px_-40px_rgba(78,145,74,0.35)] transition hover:-translate-y-1">
+          <Link
+            href="/doctor"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#e5efd9] bg-gradient-to-br from-[#f4fbf1] via-[#eaf6e6] to-[#f8fcf6] p-6 shadow-[0_20px_45px_-40px_rgba(78,145,74,0.35)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#e4f3dc]">
                 <svg
@@ -280,9 +303,12 @@ export default function Home() {
               </span>
             </div>
             <h2 className="text-2xl font-semibold text-[#12376c]">Doctor</h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#f1f9fb] via-[#e6f2f5] to-[#f7fbfd] p-6 shadow-[0_20px_45px_-40px_rgba(26,161,213,0.35)] transition hover:-translate-y-1">
+          <Link
+            href="/telefono_movil"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#f1f9fb] via-[#e6f2f5] to-[#f7fbfd] p-6 shadow-[0_20px_45px_-40px_rgba(26,161,213,0.35)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#dff1f7]">
                 <svg
@@ -309,9 +335,12 @@ export default function Home() {
             <h2 className="text-2xl font-semibold text-[#12376c]">
               Telefono movil
             </h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff] via-[#fff5ea] to-[#fff1f7] p-6 shadow-[0_20px_45px_-40px_rgba(242,140,40,0.25)] transition hover:-translate-y-1">
+          <Link
+            href="/trabajo"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#f4d3b2] bg-gradient-to-br from-[#fff] via-[#fff5ea] to-[#fff1f7] p-6 shadow-[0_20px_45px_-40px_rgba(242,140,40,0.25)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#ffe2c5]">
                 <svg
@@ -334,9 +363,12 @@ export default function Home() {
               </span>
             </div>
             <h2 className="text-2xl font-semibold text-[#12376c]">Trabajo</h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#e5efd9] bg-gradient-to-br from-[#f4fbf1] via-[#eaf6e6] to-[#f8fcf6] p-6 shadow-[0_20px_45px_-40px_rgba(78,145,74,0.35)] transition hover:-translate-y-1">
+          <Link
+            href="/cuenta_bancaria"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#e5efd9] bg-gradient-to-br from-[#f4fbf1] via-[#eaf6e6] to-[#f8fcf6] p-6 shadow-[0_20px_45px_-40px_rgba(78,145,74,0.35)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#e4f3dc]">
                 <svg
@@ -426,9 +458,12 @@ export default function Home() {
             <h2 className="text-2xl font-semibold text-[#12376c]">
               Cuenta bancaria
             </h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#cfe5ec] bg-gradient-to-br from-[#f3fbfd] via-[#e8f6fa] to-[#f7fbff] p-6 shadow-[0_20px_45px_-40px_rgba(26,161,213,0.35)] transition hover:-translate-y-1">
+          <Link
+            href="/ropa_muebles"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#cfe5ec] bg-gradient-to-br from-[#f3fbfd] via-[#e8f6fa] to-[#f7fbff] p-6 shadow-[0_20px_45px_-40px_rgba(26,161,213,0.35)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#dff1f7]">
                 <svg
@@ -458,9 +493,12 @@ export default function Home() {
             <h2 className="text-2xl font-semibold text-[#12376c]">
               Ropa y muebles
             </h2>
-          </div>
+          </Link>
 
-          <div className="group flex h-full flex-col justify-between rounded-[28px] border border-[#e9d6f0] bg-gradient-to-br from-[#fff7fb] via-[#fff2f9] to-[#f7eefe] p-6 shadow-[0_20px_45px_-40px_rgba(153,82,170,0.35)] transition hover:-translate-y-1">
+          <Link
+            href="/iglesia"
+            className="group flex h-full flex-col justify-between rounded-[28px] border border-[#e9d6f0] bg-gradient-to-br from-[#fff7fb] via-[#fff2f9] to-[#f7eefe] p-6 shadow-[0_20px_45px_-40px_rgba(153,82,170,0.35)] transition hover:-translate-y-1"
+          >
             <div className="flex items-center justify-between">
               <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#f6dff4]">
                 <svg
@@ -523,7 +561,7 @@ export default function Home() {
               </span>
             </div>
             <h2 className="text-2xl font-semibold text-[#12376c]">Igreja</h2>
-          </div>
+          </Link>
           </div>
         </div>
       </section>

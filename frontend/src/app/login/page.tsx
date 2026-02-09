@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import api from "@/lib/api";
+import api, { type ApiError } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,13 +20,20 @@ export default function LoginPage() {
     }
     setLoading(true);
     try {
-      const res = await api.login(email, password);
+      await api.login(email, password);
       // The backend sets an HttpOnly cookie; we rely on cookie-based auth now.
       try { await api.me(); } catch {}
-      router.push("/");
-    } catch (err: any) {
-      if (err?.body?.error) setError(err.body.error);
-      else setError("Login failed");
+      router.push("/users");
+    } catch (err) {
+      const apiError = err as ApiError;
+      if (apiError?.body && typeof apiError.body === "object" && "error" in apiError.body) {
+        const message = (apiError.body as { error?: string }).error;
+        if (message) {
+          setError(message);
+          return;
+        }
+      }
+      setError("Login failed");
     } finally { setLoading(false); }
   }
 
@@ -58,7 +65,7 @@ export default function LoginPage() {
         </div>
 
         <p className="mt-6 text-sm text-[#1b3f7a]/70">¿No tienes cuenta?{' '}
-          <Link className="font-semibold text-[#e4528c] hover:text-[#c93f75]" href="/sign-in">Crear cuenta</Link>
+          <Link className="font-semibold text-[#e4528c] hover:text-[#c93f75]" href="/sign-up">Crear cuenta</Link>
         </p>
       </div>
     </div>
