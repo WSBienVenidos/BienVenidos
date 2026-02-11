@@ -37,7 +37,14 @@ class AuthControllerTest {
 
   @Test
   void signupReturnsTokenAndCookie() {
-    AuthRequests.SignupRequest req = new AuthRequests.SignupRequest("a@b.com","password1");
+    AuthRequests.SignupRequest req = new AuthRequests.SignupRequest(
+        "a@b.com",
+        "8015550123",
+        "password1",
+        "A",
+        "B",
+        null
+    );
     when(authService.signup(req)).thenReturn("tokval");
     when(jwt.getExpirationSeconds()).thenReturn(60L);
 
@@ -49,7 +56,7 @@ class AuthControllerTest {
 
   @Test
   void loginReturnsTokenAndCookie() {
-    AuthRequests.LoginRequest req = new AuthRequests.LoginRequest("x@y.com","pw");
+    AuthRequests.LoginRequest req = new AuthRequests.LoginRequest("x@y.com", null, "pw");
     when(authService.login(req)).thenReturn("tkn");
     when(jwt.getExpirationSeconds()).thenReturn(60L);
 

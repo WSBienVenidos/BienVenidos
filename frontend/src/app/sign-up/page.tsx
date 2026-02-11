@@ -1,82 +1,128 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import api from "@/lib/api";
 
 type FieldErrors = Record<string, string>;
 
-export default function SignInPage() {
-
+export default function SignUpPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const inviteToken = searchParams.get("invite") ?? "";
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingInvite, setCheckingInvite] = useState(true);
+  const [inviteValid, setInviteValid] = useState(false);
   const [genericError, setGenericError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
-  const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkInvite() {
+      if (!inviteToken) {
+        if (!cancelled) {
+          setInviteValid(false);
+          setCheckingInvite(false);
+          setGenericError("Este enlace de invitacion es invalido.");
+        }
+        return;
+      }
+
+      const result = await api.validateInvite(inviteToken);
+      if (cancelled) return;
+      setInviteValid(result.valid);
+      setCheckingInvite(false);
+      if (!result.valid) {
+        setGenericError("Este enlace ya fue usado o vencio.");
+      }
+    }
+
+    checkInvite().catch(() => {
+      if (!cancelled) {
+        setInviteValid(false);
+        setCheckingInvite(false);
+        setGenericError("No se pudo validar la invitacion.");
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [inviteToken]);
 
   async function handleSignup() {
     setGenericError(null);
     setFieldErrors({});
-    
-    // Validate that both email and phone are provided
+
+    if (!inviteToken) {
+      setGenericError("Este enlace de invitacion es invalido.");
+      return;
+    }
     if (!email) {
-      setGenericError("Por favor proporciona un correo electrónico.");
+      setGenericError("Por favor proporciona un correo electronico.");
       return;
     }
     if (!phone) {
-      setGenericError("Por favor proporciona un número de teléfono.");
+      setGenericError("Por favor proporciona un numero de telefono.");
       return;
     }
     if (!password) {
-      setGenericError("Por favor proporciona una contraseña.");
+      setGenericError("Por favor proporciona una contrasena.");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch(`${apiBase}/api/auth/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          phone: phone.replace(/\D/g, ""),
-          password,
-          firstName,
-          lastName,
-        }),
+      await api.signup({
+        email,
+        phone: phone.replace(/\D/g, ""),
+        password,
+        firstName,
+        lastName,
+        inviteToken,
       });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        
-        // Handle field-specific validation errors
-        if (data?.fields) {
-          setFieldErrors(data.fields);
-          setGenericError(data.error || "Por favor completa los campos correctamente.");
-        } else if (data?.error) {
-          // Handle generic errors
-          setGenericError(data.error);
-        } else {
-          setGenericError("Error al crear cuenta");
-        }
-        setLoading(false);
-        return;
-      }
-
-      // Success — navigate to login page
       router.push("/login");
     } catch (err) {
-      console.error(err);
-      setGenericError("Error de red al conectar con el servidor");
+      const apiError = err as { body?: { error?: string; fields?: FieldErrors } };
+      if (apiError?.body?.fields) {
+        setFieldErrors(apiError.body.fields);
+      }
+      setGenericError(apiError?.body?.error ?? "Error al crear cuenta");
     } finally {
       setLoading(false);
     }
+  }
+
+  if (checkingInvite) {
+    return (
+      <div className="flex min-h-[70vh] items-center justify-center">
+        <p className="text-sm text-[#1b3f7a]/70">Validando invitacion...</p>
+      </div>
+    );
+  }
+
+  if (!inviteValid) {
+    return (
+      <div className="flex min-h-[70vh] items-center justify-center">
+        <div className="w-full max-w-md rounded-[32px] border border-[#f4d3b2] bg-white p-8 text-center">
+          <h1 className="text-2xl font-semibold text-[#12376c]">Invitacion invalida</h1>
+          <p className="mt-2 text-sm text-[#1b3f7a]/70">
+            {genericError ?? "Este enlace no es valido para crear cuenta."}
+          </p>
+          <Link className="mt-5 inline-block text-sm font-semibold text-[#1aa1d5]" href="/login">
+            Ir a iniciar sesion
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -85,88 +131,74 @@ export default function SignInPage() {
         <div className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b3f7a]/70">BienVenidos</p>
           <h1 className="text-3xl font-semibold text-[#12376c]">Crear cuenta</h1>
-          <p className="text-sm text-[#1b3f7a]/70">Registro simple para unirte a la comunidad con invitación.</p>
+          <p className="text-sm text-[#1b3f7a]/70">Registro con enlace de invitacion de un solo uso.</p>
         </div>
 
-        <form className="mt-8 space-y-4" onSubmit={(e) => e.preventDefault()}>
-          {genericError && (
-            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 border border-red-200">
+        <form className="mt-8 space-y-4" onSubmit={e => e.preventDefault()}>
+          {genericError ? (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
               {genericError}
             </div>
-          )}
+          ) : null}
 
           <label className="block text-sm text-[#1b3f7a]">
             Nombre
             <input
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={e => setFirstName(e.target.value)}
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
               placeholder="Ana"
               type="text"
-              autoComplete="given-name"
             />
-            {fieldErrors.firstName && (
-              <p className="mt-1 text-xs text-red-600">{fieldErrors.firstName}</p>
-            )}
+            {fieldErrors.firstName ? <p className="mt-1 text-xs text-red-600">{fieldErrors.firstName}</p> : null}
           </label>
+
           <label className="block text-sm text-[#1b3f7a]">
             Apellido
             <input
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={e => setLastName(e.target.value)}
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
-              placeholder="Rodríguez"
+              placeholder="Rodriguez"
               type="text"
-              autoComplete="family-name"
             />
-            {fieldErrors.lastName && (
-              <p className="mt-1 text-xs text-red-600">{fieldErrors.lastName}</p>
-            )}
+            {fieldErrors.lastName ? <p className="mt-1 text-xs text-red-600">{fieldErrors.lastName}</p> : null}
           </label>
 
           <label className="block text-sm text-[#1b3f7a]">
-            Correo electrónico
+            Correo electronico
             <input
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
               placeholder="ana@bienvenidos.com"
               type="email"
-              autoComplete="email"
             />
-            {fieldErrors.email && (
-              <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
-            )}
+            {fieldErrors.email ? <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p> : null}
           </label>
 
           <label className="block text-sm text-[#1b3f7a]">
-            Número de teléfono (mín. 10 dígitos)
+            Numero de telefono (min. 10 digitos)
             <input
               value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+              onChange={e => setPhone(e.target.value.replace(/\D/g, ""))}
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
-              placeholder="1801555XXXX"
+              placeholder="18015551234"
               type="tel"
-              autoComplete="tel"
             />
-            {fieldErrors.phone && (
-              <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
-            )}
+            {fieldErrors.phone ? <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p> : null}
           </label>
 
           <label className="block text-sm text-[#1b3f7a]">
-            Crear contraseña
+            Crear contrasena
             <input
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
-              placeholder="••••••••"
+              placeholder="********"
               type="password"
-              autoComplete="new-password"
             />
-            {fieldErrors.password && (
-              <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
-            )}
+            {fieldErrors.password ? <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p> : null}
           </label>
 
           <button
@@ -175,12 +207,15 @@ export default function SignInPage() {
             onClick={handleSignup}
             disabled={loading}
           >
-            {loading ? "Creando cuenta..." : "Crear cuenta"} {/** Crear cuenta button */}
+            {loading ? "Creando cuenta..." : "Crear cuenta"}
           </button>
         </form>
 
-        <p className="mt-6 text-sm text-[#1b3f7a]/70">¿Ya tienes acceso?{' '}
-          <Link className="font-semibold text-[#1aa1d5] hover:text-[#1693c2]" href="/login">Iniciar sesión</Link>
+        <p className="mt-6 text-sm text-[#1b3f7a]/70">
+          Ya tienes acceso?{" "}
+          <Link className="font-semibold text-[#1aa1d5] hover:text-[#1693c2]" href="/login">
+            Iniciar sesion
+          </Link>
         </p>
       </div>
     </div>

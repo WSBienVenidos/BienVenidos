@@ -9,6 +9,15 @@ type TokenResponse = {
   expiresInSeconds: number;
 };
 
+type SignupPayload = {
+  email: string;
+  phone: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+  inviteToken?: string;
+};
+
 type UserResponse = {
   id: string;
   email: string;
@@ -22,6 +31,16 @@ export type ApiError = {
 
 type LogoutResponse = {
   ok: boolean;
+};
+
+type InviteCreateResponse = {
+  inviteLink: string;
+  expiresAt: string;
+};
+
+type InviteValidationResponse = {
+  valid: boolean;
+  reason: string;
 };
 
 async function postJson<T>(path: string, body: unknown, useCredentials = true): Promise<T> {
@@ -42,8 +61,8 @@ async function postJson<T>(path: string, body: unknown, useCredentials = true): 
   return json as T;
 }
 
-export async function signup(email: string, password: string): Promise<TokenResponse> {
-  return postJson<TokenResponse>("/api/auth/signup", { email, password });
+export async function signup(payload: SignupPayload): Promise<TokenResponse> {
+  return postJson<TokenResponse>("/api/auth/signup", payload);
 }
 
 export async function login(email: string, password: string): Promise<TokenResponse> {
@@ -74,5 +93,25 @@ export async function logout(): Promise<LogoutResponse | null> {
   }
 }
 
-const api = { signup, login, me, logout };
+export async function createInvite(): Promise<InviteCreateResponse> {
+  return postJson<InviteCreateResponse>("/api/invites", {});
+}
+
+export async function validateInvite(token: string): Promise<InviteValidationResponse> {
+  const params = new URLSearchParams({ token });
+  const res = await fetch(`${API_BASE}/api/invites/validate?${params.toString()}`);
+  const text = await res.text();
+  let json: unknown = null;
+  try {
+    json = text ? JSON.parse(text) : null;
+  } catch {
+    json = null;
+  }
+  if (!res.ok || !json) {
+    return { valid: false, reason: "invalid_or_expired" };
+  }
+  return json as InviteValidationResponse;
+}
+
+const api = { signup, login, me, logout, createInvite, validateInvite };
 export default api;

@@ -15,3 +15,13 @@ create table if not exists public.app_users (
   verification_code_expiry timestamptz,
   created_at timestamptz not null default now()
 );
+
+create table if not exists public.invite_tokens (
+  id uuid primary key default uuid_generate_v4(),
+  token_hash text not null unique,
+  created_by_user_id uuid not null references public.app_users(id),
+  expires_at timestamptz not null,
+  used_at timestamptz,
+  used_by_user_id uuid references public.app_users(id),
+  created_at timestamptz not null default now()
+);

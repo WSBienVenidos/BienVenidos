@@ -1,32 +1,36 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import UsersPage from "./page";
+import api from "@/lib/api";
+
+jest.mock("@/lib/api", () => ({
+  __esModule: true,
+  default: {
+    createInvite: jest.fn(),
+  },
+}));
 
 describe("UsersPage", () => {
   it("renders the welcome message with title-cased name", () => {
     render(<UsersPage />);
-
     expect(screen.getByText(/Bienvenido, Rosa\./)).toBeInTheDocument();
   });
 
-  it("builds a mailto invite when user provides an email", () => {
-    const promptMock = jest.spyOn(window, "prompt").mockReturnValue("friend@example.com");
+  it("calls invite API and shows success message", async () => {
+    const createInviteMock = jest.mocked(api.createInvite);
+    createInviteMock.mockResolvedValue({
+      inviteLink: "https://app/sign-up?invite=abc",
+      expiresAt: "2099-01-01T00:00:00Z",
+    });
 
-    const originalLocation = window.location;
-    // @ts-expect-error - allow reassignment for test
-    delete window.location;
-    // @ts-expect-error - test override
-    window.location = { href: "" };
+    const writeTextMock = jest.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText: writeTextMock } });
 
     render(<UsersPage />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Enviar invitación/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enviar invitacion/i }));
 
-    expect(window.location.href).toContain("mailto:friend@example.com");
-    expect(window.location.href).toContain("subject=");
-    expect(window.location.href).toContain("body=");
-
-    promptMock.mockRestore();
-    // @ts-expect-error - restore
-    window.location = originalLocation;
+    expect(createInviteMock).toHaveBeenCalled();
+    expect(await screen.findByText(/copiado al portapapeles/i)).toBeInTheDocument();
+    expect(writeTextMock).toHaveBeenCalledWith("https://app/sign-up?invite=abc");
   });
 });
