@@ -7,6 +7,7 @@ import com.bienvenidos.backend.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Instant;
 import java.util.Random;
@@ -17,21 +18,34 @@ public class AuthService {
   private final PasswordEncoder encoder;
   private final JwtService jwt;
   private final EmailService emailService;
+  private final InviteService inviteService;
+  private final boolean requireInviteToken;
 
-  public AuthService(AppUserRepository users, PasswordEncoder encoder, JwtService jwt, EmailService emailService) {
+  public AuthService(
+      AppUserRepository users,
+      PasswordEncoder encoder,
+      JwtService jwt,
+      EmailService emailService,
+      InviteService inviteService,
+      @Value("${app.invites.requireToken:true}") boolean requireInviteToken
+  ) {
     this.users = users;
     this.encoder = encoder;
     this.jwt = jwt;
     this.emailService = emailService;
+    this.inviteService = inviteService;
+    this.requireInviteToken = requireInviteToken;
   }
 
   @Transactional
   public String signup(AuthRequests.SignupRequest req) {
+    String normalizedPhone = req.phone() != null ? req.phone().replaceAll("[^0-9]", "").trim() : null;
+
     // Validate that both email and phone are provided
     if (req.email() == null || req.email().isBlank()) {
       throw new IllegalArgumentException("Email is required");
     }
-    if (req.phone() == null || req.phone().isBlank()) {
+    if (normalizedPhone == null || normalizedPhone.isBlank()) {
       throw new IllegalArgumentException("Phone is required");
     }
     
@@ -39,14 +53,14 @@ public class AuthService {
     if (users.existsByEmailIgnoreCase(req.email())) {
       throw new IllegalArgumentException("Email already registered");
     }
-    if (users.existsByPhone(req.phone())) {
+    if (users.existsByPhone(normalizedPhone)) {
       throw new IllegalArgumentException("Phone number already registered");
     }
 
     // Create user
     AppUser u = new AppUser();
     u.setEmail(req.email().trim().toLowerCase());
-    u.setPhone(req.phone().replaceAll("[^0-9]", "").trim());
+    u.setPhone(normalizedPhone);
     u.setFirstName(req.firstName() != null ? req.firstName().trim() : "");
     u.setLastName(req.lastName() != null ? req.lastName().trim() : "");
     u.setPasswordHash(encoder.encode(req.password()));
@@ -58,6 +72,11 @@ public class AuthService {
     u.setVerificationCodeExpiry(Instant.now().plusSeconds(15 * 60)); // 15 minutes
     
     users.save(u);
+
+    if (requireInviteToken) {
+      // Consumed inside the same transaction so one invite can create only one account.
+      inviteService.consumeInvite(req.inviteToken(), u.getId());
+    }
     
     // Send verification email
     emailService.sendVerificationEmail(u.getEmail(), verificationCode);

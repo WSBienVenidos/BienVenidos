@@ -40,6 +40,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/health").permitAll()
             .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/auth/verify-email").permitAll()
+            .requestMatchers("/api/invites/validate").permitAll()
             .anyRequest().authenticated()
         )
         .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))

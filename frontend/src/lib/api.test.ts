@@ -26,12 +26,26 @@ describe("api", () => {
     global.fetch = fetchMock;
 
     const { signup } = await loadApi();
-    const result = await signup("test@example.com", "pass");
+    const result = await signup({
+      email: "test@example.com",
+      phone: "18015551234",
+      password: "passpass",
+      firstName: "Test",
+      lastName: "User",
+      inviteToken: "abc123",
+    });
 
     expect(fetchMock).toHaveBeenCalledWith("https://example.test/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: "test@example.com", password: "pass" }),
+      body: JSON.stringify({
+        email: "test@example.com",
+        phone: "18015551234",
+        password: "passpass",
+        firstName: "Test",
+        lastName: "User",
+        inviteToken: "abc123",
+      }),
       credentials: "include",
     });
     expect(result).toEqual({ token: "t", tokenType: "bearer", expiresInSeconds: 3600 });

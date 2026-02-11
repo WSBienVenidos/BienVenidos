@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {
     "spring.jpa.hibernate.ddl-auto=create-drop",
     "app.jwt.secret=test-secret-at-least-32-characters-long-1234567890",
+    "app.invites.requireToken=false",
     "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
     "spring.datasource.driver-class-name=org.h2.Driver",
     "spring.datasource.username=sa",
@@ -57,7 +58,8 @@ public class AuthControllerTest {
         "18015551234",
         "Password123!",
         "John",
-        "Doe"
+        "Doe",
+        null
     );
 
     // Act & Assert
@@ -94,7 +96,8 @@ public class AuthControllerTest {
         "18015551111",
         "AnotherPassword123!",
         "Jane",
-        "Smith"
+        "Smith",
+        null
     );
 
     mockMvc.perform(post("/api/auth/signup")
@@ -112,7 +115,8 @@ public class AuthControllerTest {
         "18015551234",
         "Password123!",
         "Test",
-        "User"
+        "User",
+        null
     );
 
     // Act & Assert
@@ -131,7 +135,8 @@ public class AuthControllerTest {
         "18015551234",
         "Short1!",  // Only 7 chars
         "Test",
-        "User"
+        "User",
+        null
     );
 
     // Act & Assert
@@ -150,7 +155,8 @@ public class AuthControllerTest {
         "18015551234",
         "Password123!",
         "Phone",
-        "User"
+        "User",
+        null
     );
 
     // Act & Assert
@@ -179,7 +185,8 @@ public class AuthControllerTest {
         "123",
         "Password123!",
         "Invalid",
-        "Phone"
+        "Phone",
+        null
     );
 
     // Act & Assert
@@ -198,7 +205,8 @@ public class AuthControllerTest {
         null,
         "Password123!",
         "No",
-        "Credentials"
+        "Credentials",
+        null
     );
 
     // Act & Assert

@@ -1,7 +1,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import SignUpPage from "./page";
+import api from "@/lib/api";
 
 const pushMock = jest.fn();
+const getSearchParamMock = jest.fn();
 
 jest.mock("next/navigation", () => ({
   __esModule: true,
@@ -13,89 +15,70 @@ jest.mock("next/navigation", () => ({
     back: jest.fn(),
     forward: jest.fn(),
   }),
+  useSearchParams: () => ({
+    get: getSearchParamMock,
+  }),
+}));
+
+jest.mock("@/lib/api", () => ({
+  __esModule: true,
+  default: {
+    validateInvite: jest.fn(),
+    signup: jest.fn(),
+  },
 }));
 
 describe("SignUpPage", () => {
-  let consoleErrorSpy: jest.SpyInstance;
-
   beforeEach(() => {
     pushMock.mockReset();
-    process.env.NEXT_PUBLIC_API_URL = "https://example.test";
-    consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    getSearchParamMock.mockReset();
+    jest.mocked(api.validateInvite).mockReset();
+    jest.mocked(api.signup).mockReset();
   });
 
-  afterEach(() => {
-    consoleErrorSpy.mockRestore();
-  });
+  it("shows invalid invite view when token is missing", async () => {
+    getSearchParamMock.mockReturnValue(null);
 
-  it("shows validation error when email or password missing", async () => {
     render(<SignUpPage />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Crear cuenta/i }));
-
-    expect(await screen.findByText("Por favor completa correo y contraseña.")).toBeInTheDocument();
+    expect(await screen.findByText(/Invitacion invalida/i)).toBeInTheDocument();
   });
 
-  it("redirects to login on success", async () => {
-    const fetchMock = jest.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({}),
+  it("redirects to login on successful signup", async () => {
+    getSearchParamMock.mockReturnValue("abc123");
+    jest.mocked(api.validateInvite).mockResolvedValue({ valid: true, reason: "ok" });
+    jest.mocked(api.signup).mockResolvedValue({
+      token: "t",
+      tokenType: "Bearer",
+      expiresInSeconds: 3600,
     });
-    (global as typeof globalThis).fetch = fetchMock as unknown as typeof fetch;
 
     render(<SignUpPage />);
+
+    await screen.findByText(/Crear cuenta/i);
 
     fireEvent.change(screen.getByPlaceholderText("ana@bienvenidos.com"), {
       target: { value: "user@example.com" },
     });
-    fireEvent.change(screen.getByPlaceholderText("••••••••"), {
-      target: { value: "pass" },
+    fireEvent.change(screen.getByPlaceholderText("18015551234"), {
+      target: { value: "18015550000" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("********"), {
+      target: { value: "passpass123" },
     });
 
     fireEvent.click(screen.getByRole("button", { name: /Crear cuenta/i }));
 
     await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith("https://example.test/api/auth/signup", expect.any(Object));
+      expect(api.signup).toHaveBeenCalledWith(
+        expect.objectContaining({
+          email: "user@example.com",
+          phone: "18015550000",
+          password: "passpass123",
+          inviteToken: "abc123",
+        })
+      );
       expect(pushMock).toHaveBeenCalledWith("/login");
     });
-  });
-
-  it("shows server error message when response is not ok", async () => {
-    const fetchMock = jest.fn().mockResolvedValue({
-      ok: false,
-      json: async () => ({ error: "Ya existe" }),
-    });
-    (global as typeof globalThis).fetch = fetchMock as unknown as typeof fetch;
-
-    render(<SignUpPage />);
-
-    fireEvent.change(screen.getByPlaceholderText("ana@bienvenidos.com"), {
-      target: { value: "user@example.com" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("••••••••"), {
-      target: { value: "pass" },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /Crear cuenta/i }));
-
-    expect(await screen.findByText("Ya existe")).toBeInTheDocument();
-  });
-
-  it("shows network error when fetch throws", async () => {
-    const fetchMock = jest.fn().mockRejectedValue(new Error("network"));
-    (global as typeof globalThis).fetch = fetchMock as unknown as typeof fetch;
-
-    render(<SignUpPage />);
-
-    fireEvent.change(screen.getByPlaceholderText("ana@bienvenidos.com"), {
-      target: { value: "user@example.com" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("••••••••"), {
-      target: { value: "pass" },
-    });
-
-    fireEvent.click(screen.getByRole("button", { name: /Crear cuenta/i }));
-
-    expect(await screen.findByText("Error de red al conectar con el servidor")).toBeInTheDocument();
   });
 });

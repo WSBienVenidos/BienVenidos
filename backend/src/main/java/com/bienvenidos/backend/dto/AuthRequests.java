@@ -10,7 +10,8 @@ public class AuthRequests {
       @Pattern(regexp = "^$|^\\d{10,}$", message = "Phone must contain at least 10 digits if provided") String phone,
       @Size(min = 8, max = 72, message = "Password must be between 8 and 72 characters") String password,
       String firstName,
-      String lastName
+      String lastName,
+      String inviteToken
   ) {}
 
   public record LoginRequest(
