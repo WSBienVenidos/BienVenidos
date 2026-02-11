@@ -5,6 +5,7 @@ jest.mock("next/image", () => ({
   __esModule: true,
   default: ({ src, alt, ...rest }) => {
     const resolvedSrc = typeof src === "string" ? src : src?.src ?? "";
+    // eslint-disable-next-line @next/next/no-img-element
     return <img src={resolvedSrc} alt={alt} {...rest} />;
   },
 }));
@@ -27,5 +28,8 @@ jest.mock("next/navigation", () => ({
     refresh: jest.fn(),
     back: jest.fn(),
     forward: jest.fn(),
+  }),
+  useSearchParams: () => ({
+    get: () => null,
   }),
 }));

@@ -55,7 +55,7 @@ describe("SignUpPage", () => {
 
     render(<SignUpPage />);
 
-    await screen.findByText(/Crear cuenta/i);
+    await screen.findByRole("heading", { name: /Crear cuenta/i });
 
     fireEvent.change(screen.getByPlaceholderText("ana@bienvenidos.com"), {
       target: { value: "user@example.com" },

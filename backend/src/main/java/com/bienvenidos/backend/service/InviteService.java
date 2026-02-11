@@ -56,7 +56,7 @@ public class InviteService {
       throw new IllegalArgumentException("Invitation token is required");
     }
 
-    InviteToken invite = invites.findByTokenHash(hashToken(token))
+    InviteToken invite = invites.findForUpdateByTokenHash(hashToken(token))
         .orElseThrow(() -> new IllegalArgumentException("Invalid invitation link"));
 
     if (invite.getUsedAt() != null) {
