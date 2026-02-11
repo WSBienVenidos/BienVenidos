@@ -168,19 +168,6 @@ export default function SignInPage() {
               <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
             )}
           </label>
-          <label className="block text-sm text-[#1b3f7a]">
-            Código de invitación
-            <input
-              value={inviteCode}
-              onChange={(e) => setInviteCode(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
-              placeholder="INV-2026"
-              type="text"
-            />
-            {fieldErrors.inviteCode && (
-              <p className="mt-1 text-xs text-red-600">{fieldErrors.inviteCode}</p>
-            )}
-          </label>
 
           <button
             className="w-full rounded-full bg-[#e4528c] px-4 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-18px_rgba(228,82,140,0.6)] transition hover:-translate-y-0.5 hover:bg-[#f0679c] disabled:opacity-60"

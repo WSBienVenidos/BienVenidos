@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import SuggestionsButton from "@/components/SuggestionsButton";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -57,7 +56,6 @@ export default function RootLayout({
               {children}
             </main>
           </div>
-          <SuggestionsButton />
           <footer className="relative mt-auto border-t border-[#f4d3b2] bg-white py-8 text-sm text-[#1b3f7a]/70">
             <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row sm:items-center">
               <span className="text-center text-xs font-medium text-[#1b3f7a]/60 sm:text-left">
