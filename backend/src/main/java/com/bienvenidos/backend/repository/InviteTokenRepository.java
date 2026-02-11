@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface InviteTokenRepository extends JpaRepository<InviteToken, UUID> {
-  @Lock(LockModeType.PESSIMISTIC_WRITE)
   Optional<InviteToken> findByTokenHash(String tokenHash);
+
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  Optional<InviteToken> findForUpdateByTokenHash(String tokenHash);
 }

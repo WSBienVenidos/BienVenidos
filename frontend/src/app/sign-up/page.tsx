@@ -2,14 +2,12 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import api from "@/lib/api";
 
 type FieldErrors = Record<string, string>;
 
-export const dynamic = "force-dynamic";
-
-export default function SignUpPage() {
+function SignUpPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const inviteToken = searchParams.get("invite") ?? "";
@@ -221,5 +219,13 @@ export default function SignUpPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-[70vh] items-center justify-center"><p className="text-sm text-[#1b3f7a]/70">Cargando...</p></div>}>
+      <SignUpPageInner />
+    </Suspense>
   );
 }
