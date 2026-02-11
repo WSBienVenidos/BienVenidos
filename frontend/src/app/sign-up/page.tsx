@@ -7,6 +7,8 @@ import api from "@/lib/api";
 
 type FieldErrors = Record<string, string>;
 
+export const dynamic = "force-dynamic";
+
 export default function SignUpPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
