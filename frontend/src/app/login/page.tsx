@@ -34,7 +34,6 @@ export default function LoginPage() {
         }
       }
       setError("Login failed");
-    }
     } finally { setLoading(false); }
   }
 
