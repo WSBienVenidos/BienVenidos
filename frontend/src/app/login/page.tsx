@@ -24,6 +24,11 @@ export default function LoginPage() {
       // The backend sets an HttpOnly cookie; we rely on cookie-based auth now.
       try { await api.me(); } catch {}
       router.push("/users");
+<<<<<<< HEAD
+    } catch (err: any) {
+      if (err?.body?.error) setError(err.body.error);
+      else setError("Login failed");
+=======
     } catch (err) {
       const apiError = err as ApiError;
       if (apiError?.body && typeof apiError.body === "object" && "error" in apiError.body) {
@@ -34,6 +39,7 @@ export default function LoginPage() {
         }
       }
       setError("Login failed");
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
     } finally { setLoading(false); }
   }
 

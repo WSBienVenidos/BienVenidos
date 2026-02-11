@@ -1,6 +1,14 @@
 "use client";
 
+<<<<<<< HEAD
+import { useMemo, useState } from "react";
+<<<<<<< HEAD
+=======
+import type { ReactNode } from "react";
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
+=======
 import { JSX, useMemo, useState } from "react";
+>>>>>>> 0143582fd6edc614aba263616c0e09342fabc783
 import Link from "next/link";
 
 /**
@@ -28,10 +36,30 @@ type CategoryKey =
 type Category = {
   key: CategoryKey;
   title: string;
+<<<<<<< HEAD
+  emoji: string; // placeholder icon
+=======
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
   tone: "orange" | "yellow" | "purple" | "blue" | "green" | "pink" | "neutral";
 };
 
 const CATEGORIES: Category[] = [
+<<<<<<< HEAD
+  { key: "alimentos", title: "Alimentos", emoji: "🍱", tone: "orange" },
+  { key: "vivienda", title: "Vivienda", emoji: "🏠", tone: "yellow" },
+  { key: "asesoria_legal", title: "Asesoría legal", emoji: "⚖️", tone: "purple" },
+  { key: "transporte", title: "Transporte", emoji: "🚌", tone: "blue" },
+  { key: "escuela", title: "Escuela", emoji: "🏫", tone: "orange" },
+  { key: "un_amigo", title: "Un amigo", emoji: "🙂", tone: "neutral" },
+  { key: "doctor", title: "Doctor", emoji: "🧰", tone: "green" },
+  { key: "telefono_movil", title: "Teléfono móvil", emoji: "📱", tone: "blue" },
+  { key: "trabajo", title: "Trabajo", emoji: "💼", tone: "orange" },
+  { key: "cuenta_bancaria", title: "Cuenta bancaria", emoji: "🏛️", tone: "green" },
+  { key: "ropa_muebles", title: "Ropa y muebles", emoji: "👕", tone: "blue" },
+  { key: "iglesia", title: "Iglesia", emoji: "⛪", tone: "pink" },
+];
+
+=======
   { key: "alimentos", title: "Alimentos", tone: "orange" },
   { key: "vivienda", title: "Vivienda", tone: "yellow" },
   { key: "asesoria_legal", title: "Asesoría legal", tone: "purple" },
@@ -459,6 +487,7 @@ const CATEGORY_ICONS: Record<CategoryKey, JSX.Element> = {
   ),
 };
 
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
 type Post = {
   id: string;
   category: CategoryKey;
@@ -618,11 +647,14 @@ export default function OfrecerAyudaPage() {
     setMessage("");
   }
 
+<<<<<<< HEAD
+=======
   function closeReply() {
     setSelectedPostId(null);
     setSubmittedFor(null);
   }
 
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
   function submitReply(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedPostId) return;
@@ -687,7 +719,11 @@ export default function OfrecerAyudaPage() {
           </button>
         </div>
 
+<<<<<<< HEAD
+        <div className="mt-6 grid gap-6 md:grid-cols-4">
+=======
         <div className="mt-5 flex flex-wrap gap-3">
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
           {CATEGORIES.map(cat => {
             const t = toneClasses(cat.tone);
             const isSelected = filter === cat.key;
@@ -698,26 +734,49 @@ export default function OfrecerAyudaPage() {
                 type="button"
                 onClick={() => setFilter(cat.key)}
                 className={[
+<<<<<<< HEAD
+                  "group relative overflow-hidden rounded-[28px] border p-6 text-left transition",
+                  "hover:-translate-y-0.5",
+                  t.bg,
+=======
                   "group inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] transition",
                   "hover:-translate-y-0.5",
                   "bg-white",
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
                   t.border,
                   isSelected ? "ring-4" : "ring-0",
                   isSelected ? t.ring : "ring-transparent",
                 ].join(" ")}
               >
+<<<<<<< HEAD
+                <div className="flex items-start gap-4">
+                  <div className={["grid h-12 w-12 place-items-center rounded-2xl", t.chipBg].join(" ")}>
+                    <span className={["text-2xl", t.icon].join(" ")}>{cat.emoji}</span>
+                  </div>
+                  <div className="text-xl font-semibold text-[#12376c]">{cat.title}</div>
+                </div>
+
+                <div className="pointer-events-none absolute -right-20 -top-20 h-44 w-44 rounded-full bg-white/35 blur-2xl opacity-70 transition group-hover:opacity-100" />
+=======
                 <span className={["grid h-8 w-8 place-items-center rounded-full", t.chipBg].join(" ")}>
                   {CATEGORY_ICONS[cat.key]}
                 </span>
                 <span className="text-[#12376c]">{cat.title}</span>
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
               </button>
             );
           })}
         </div>
       </div>
 
+<<<<<<< HEAD
+      {/* List + reply */}
+      <div className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+        {/* Posts */}
+=======
       {/* List */}
       <div className="mt-10">
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
         <section className="space-y-6">
           <div className="rounded-[28px] border border-[#f4d3b2] bg-white p-6 shadow-[0_25px_80px_-60px_rgba(15,42,78,0.12)]">
             <div className="flex items-center justify-between gap-4">
@@ -815,6 +874,23 @@ export default function OfrecerAyudaPage() {
             </div>
           </div>
         </section>
+<<<<<<< HEAD
+
+        {/* Reply panel */}
+        <aside className="lg:sticky lg:top-6">
+          <div className="rounded-[28px] border border-[#f4d3b2] bg-white p-6 shadow-[0_25px_80px_-60px_rgba(15,42,78,0.12)]">
+            <div className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b3f7a]/60">
+              Responder
+            </div>
+            <h2 className="mt-2 text-2xl font-semibold text-[#12376c]">
+              Enviar mensaje
+            </h2>
+            <p className="mt-2 text-sm text-[#1b3f7a]/70">
+              {selectedPost
+                ? "Tu mensaje se enviará a la persona que pidió ayuda."
+                : "Selecciona una publicación para responder."}
+            </p>
+=======
       </div>
 
       {selectedPost ? (
@@ -841,16 +917,24 @@ export default function OfrecerAyudaPage() {
                 Cerrar
               </button>
             </div>
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
 
             <div className="mt-6 rounded-2xl border border-[#f4d3b2] bg-[#fff6ec] p-4">
               <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#1b3f7a]/60">
                 Publicación seleccionada
               </div>
               <div className="mt-2 text-sm font-semibold text-[#12376c]">
+<<<<<<< HEAD
+                {selectedPost ? selectedPost.title : "Ninguna"}
+              </div>
+              <div className="mt-1 text-xs text-[#1b3f7a]/70">
+                {selectedPost ? selectedPost.city : "—"}
+=======
                 {selectedPost.title}
               </div>
               <div className="mt-1 text-xs text-[#1b3f7a]/70">
                 {selectedPost.city}
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
               </div>
             </div>
 
@@ -893,7 +977,17 @@ export default function OfrecerAyudaPage() {
 
               <button
                 type="submit"
+<<<<<<< HEAD
+                disabled={!selectedPostId}
+                className={[
+                  "mt-2 w-full rounded-full px-6 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-white transition",
+                  !selectedPostId
+                    ? "cursor-not-allowed bg-[#1aa1d5]/40"
+                    : "bg-[#1aa1d5] shadow-[0_12px_30px_-18px_rgba(26,161,213,0.7)] hover:-translate-y-0.5 hover:bg-[#21b4e4]",
+                ].join(" ")}
+=======
                 className="mt-2 w-full rounded-full bg-[#1aa1d5] px-6 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-white shadow-[0_12px_30px_-18px_rgba(26,161,213,0.7)] transition hover:-translate-y-0.5 hover:bg-[#21b4e4]"
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
               >
                 Enviar
               </button>
@@ -903,8 +997,13 @@ export default function OfrecerAyudaPage() {
               </p>
             </form>
           </div>
+<<<<<<< HEAD
+        </aside>
+      </div>
+=======
         </div>
       ) : null}
+>>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
     </div>
   );
 }
