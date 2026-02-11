@@ -1,10 +1,14 @@
 "use client";
 
+<<<<<<< HEAD
 import { useMemo, useState } from "react";
 <<<<<<< HEAD
 =======
 import type { ReactNode } from "react";
 >>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
+=======
+import { JSX, useMemo, useState } from "react";
+>>>>>>> 0143582fd6edc614aba263616c0e09342fabc783
 import Link from "next/link";
 
 /**
@@ -70,7 +74,7 @@ const CATEGORIES: Category[] = [
   { key: "iglesia", title: "Iglesia", tone: "pink" },
 ];
 
-const CATEGORY_ICONS: Record<CategoryKey, ReactNode> = {
+const CATEGORY_ICONS: Record<CategoryKey, JSX.Element> = {
   alimentos: (
     <svg
       fill="#ff943d"
@@ -803,7 +807,7 @@ export default function OfrecerAyudaPage() {
                     ].join(" ")}
                   >
                     <div className="flex gap-4">
-                      <div className="h-20 w-20 flex-shrink-0 rounded-2xl border border-[#e6dccf] bg-white/70 grid place-items-center text-xs font-semibold text-[#1b3f7a]/50">
+                      <div className="h-20 w-20 shrink-0ded-2xl border border-[#e6dccf] bg-white/70 grid place-items-center text-xs font-semibold text-[#1b3f7a]/50">
                         Picture
                       </div>
 
@@ -960,7 +964,7 @@ export default function OfrecerAyudaPage() {
                 <textarea
                   value={message}
                   onChange={e => setMessage(e.target.value)}
-                  className="mt-2 min-h-[120px] w-full resize-y rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
+                  className="mt-2 min-h-30 w-full resize-y rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
                   placeholder="Escribe cómo puedes ayudar y cuáles son los próximos pasos..."
                 />
               </label>

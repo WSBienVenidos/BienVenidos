@@ -11,7 +11,12 @@ const instructions = [
   "Si es un recurso gratis o de bajo costo, mencionalo.",
 ];
 
-export default function SuggestionsButton() {
+type SuggestionsButtonProps = {
+  fixed?: boolean;
+  className?: string;
+};
+
+export default function SuggestionsButton({ fixed = true, className }: SuggestionsButtonProps) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -61,7 +66,11 @@ export default function SuggestionsButton() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-3 rounded-full border border-[#f4d3b2] bg-[#f28c28] px-5 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_18px_45px_-30px_rgba(242,140,40,0.8)] transition hover:-translate-y-1 hover:bg-[#e67f1d]"
+        className={[
+          "inline-flex items-center gap-3 rounded-full border border-[#f4d3b2] bg-[#f28c28] px-5 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-[0_18px_45px_-30px_rgba(242,140,40,0.8)] transition hover:-translate-y-1 hover:bg-[#e67f1d]",
+          fixed ? "fixed bottom-6 right-6 z-40" : "",
+          className ?? "",
+        ].join(" ")}
         aria-haspopup="dialog"
       >
         Sugerencias

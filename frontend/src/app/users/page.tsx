@@ -25,6 +25,7 @@ export default function UsersPage() {
   const email = "test1@gmail.com";
   const displayName = titleCase("rosa");
 <<<<<<< HEAD
+<<<<<<< HEAD
   const inviteCode = "INV-8D2K";
 =======
   const inviteLink = "https://bienvenidos.example/invite/PLACEHOLDER";
@@ -46,6 +47,8 @@ export default function UsersPage() {
     window.location.href = `mailto:${recipient}?${params.toString()}`;
   }
 >>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
+=======
+>>>>>>> 0143582fd6edc614aba263616c0e09342fabc783
 
   return (
     <div className="w-full">
@@ -80,6 +83,7 @@ export default function UsersPage() {
             </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             <div className="w-full max-w-xs rounded-2xl border border-[#f4d3b2] bg-[#fff6ec] p-5">
               <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#1b3f7a]/60">
                 Código de invitación
@@ -106,6 +110,8 @@ export default function UsersPage() {
               </button>
 >>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
             </div>
+=======
+>>>>>>> 0143582fd6edc614aba263616c0e09342fabc783
           </div>
         </div>
       </div>

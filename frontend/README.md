@@ -49,3 +49,21 @@ npm run dev
 
 The login and signup pages will POST to `${NEXT_PUBLIC_API_URL}/api/auth/login` and `/api/auth/signup`.
 The backend sets an HttpOnly cookie (`bv_token`) on successful auth; the frontend uses cookie-based auth and does not store the JWT in `localStorage`.
+
+## Tests
+
+Run the test suite:
+
+```bash
+npm run test
+```
+
+Run the test suite with coverage:
+
+```bash
+npm run test:coverage
+```
+
+Test documentation:
+- `TESTING.md`
+- `TESTING.pdf`

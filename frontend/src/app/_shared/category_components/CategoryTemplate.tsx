@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import SuggestionsButton from "@/components/SuggestionsButton";
 import type { Category, Resource } from "../category_data";
 
 const mapSearchUrl = (address: string) =>
@@ -90,21 +91,11 @@ export default function CategoryTemplate({ category, resources }: CategoryTempla
         </div>
 
         <div className="mt-8 rounded-[24px] border border-dashed border-[#e0cbb7] bg-white/70 p-5">
-          <div className="text-sm text-[#1b3f7a]/75">
-            ¿Conoces otro lugar? Cuéntanos.
-          </div>
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <input
-              type="text"
-              placeholder="Comparte el nombre del lugar"
-              className="h-12 w-full rounded-full border border-[#f1d0ae] bg-[#fff6ec] px-4 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
-            />
-            <button
-              type="button"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-[#f28c28] px-6 text-xs font-semibold uppercase tracking-[0.25em] text-white shadow-[0_12px_30px_-18px_rgba(242,140,40,0.7)] transition hover:-translate-y-0.5 hover:bg-[#ff9b3b]"
-            >
-              Publicar
-            </button>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-sm text-[#1b3f7a]/75">
+              ¿Conoces otro lugar? Cuéntanos.
+            </div>
+            <SuggestionsButton fixed={false} />
           </div>
         </div>
       </div>

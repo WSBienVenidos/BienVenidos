@@ -46,6 +46,22 @@ public class AuthController {
     .body(new AuthResponses.AuthTokenResponse(token, "Bearer", jwtService.getExpirationSeconds()));
   }
 
+  @PostMapping("/verify-email")
+  public ResponseEntity<AuthResponses.AuthTokenResponse> verifyEmail(@RequestBody AuthRequests.VerifyEmailRequest req) {
+  String token = authService.verifyEmail(req);
+  ResponseCookie cookie = ResponseCookie.from("bv_token", token)
+    .httpOnly(true)
+    .secure(false)
+    .path("/")
+    .maxAge(jwtService.getExpirationSeconds())
+    .sameSite("Lax")
+    .build();
+
+  return ResponseEntity.ok()
+    .header("Set-Cookie", cookie.toString())
+    .body(new AuthResponses.AuthTokenResponse(token, "Bearer", jwtService.getExpirationSeconds()));
+  }
+
   @PostMapping("/login")
   public ResponseEntity<AuthResponses.AuthTokenResponse> login(@Valid @RequestBody AuthRequests.LoginRequest req) {
   String token = authService.login(req);

@@ -1,30 +1,40 @@
 "use client";
 
-"use client";
-
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function SignInPage() {
+type FieldErrors = Record<string, string>;
 
-  // Initialize state variables for BACK END
+export default function SignInPage() {
 
   const router = useRouter();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [genericError, setGenericError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
   async function handleSignup() {
-    setError(null);
-    if (!email || !password) {
-      setError("Por favor completa correo y contraseña.");
+    setGenericError(null);
+    setFieldErrors({});
+    
+    // Validate that both email and phone are provided
+    if (!email) {
+      setGenericError("Por favor proporciona un correo electrónico.");
+      return;
+    }
+    if (!phone) {
+      setGenericError("Por favor proporciona un número de teléfono.");
+      return;
+    }
+    if (!password) {
+      setGenericError("Por favor proporciona una contraseña.");
       return;
     }
 
@@ -33,12 +43,28 @@ export default function SignInPage() {
       const res = await fetch(`${apiBase}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          phone: phone.replace(/\D/g, ""),
+          password,
+          firstName,
+          lastName,
+        }),
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setError(data?.error ?? "Error al crear cuenta");
+        
+        // Handle field-specific validation errors
+        if (data?.fields) {
+          setFieldErrors(data.fields);
+          setGenericError(data.error || "Por favor completa los campos correctamente.");
+        } else if (data?.error) {
+          // Handle generic errors
+          setGenericError(data.error);
+        } else {
+          setGenericError("Error al crear cuenta");
+        }
         setLoading(false);
         return;
       }
@@ -47,7 +73,7 @@ export default function SignInPage() {
       router.push("/login");
     } catch (err) {
       console.error(err);
-      setError("Error de red al conectar con el servidor");
+      setGenericError("Error de red al conectar con el servidor");
     } finally {
       setLoading(false);
     }
@@ -63,6 +89,12 @@ export default function SignInPage() {
         </div>
 
         <form className="mt-8 space-y-4" onSubmit={(e) => e.preventDefault()}>
+          {genericError && (
+            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700 border border-red-200">
+              {genericError}
+            </div>
+          )}
+
           <label className="block text-sm text-[#1b3f7a]">
             Nombre
             <input
@@ -73,6 +105,9 @@ export default function SignInPage() {
               type="text"
               autoComplete="given-name"
             />
+            {fieldErrors.firstName && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.firstName}</p>
+            )}
           </label>
           <label className="block text-sm text-[#1b3f7a]">
             Apellido
@@ -84,7 +119,11 @@ export default function SignInPage() {
               type="text"
               autoComplete="family-name"
             />
+            {fieldErrors.lastName && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.lastName}</p>
+            )}
           </label>
+
           <label className="block text-sm text-[#1b3f7a]">
             Correo electrónico
             <input
@@ -95,18 +134,26 @@ export default function SignInPage() {
               type="email"
               autoComplete="email"
             />
+            {fieldErrors.email && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
+            )}
           </label>
+
           <label className="block text-sm text-[#1b3f7a]">
-            Número de teléfono
+            Número de teléfono (mín. 10 dígitos)
             <input
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
               className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#e4528c]/40"
-              placeholder="+1 801 555 1234"
+              placeholder="1801555XXXX"
               type="tel"
               autoComplete="tel"
             />
+            {fieldErrors.phone && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
+            )}
           </label>
+
           <label className="block text-sm text-[#1b3f7a]">
             Crear contraseña
             <input
@@ -117,8 +164,10 @@ export default function SignInPage() {
               type="password"
               autoComplete="new-password"
             />
+            {fieldErrors.password && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
+            )}
           </label>
-          {error && <p className="text-sm text-red-600">{error}</p>}
 
           <button
             className="w-full rounded-full bg-[#e4528c] px-4 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-18px_rgba(228,82,140,0.6)] transition hover:-translate-y-0.5 hover:bg-[#f0679c] disabled:opacity-60"
