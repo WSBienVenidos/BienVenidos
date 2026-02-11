@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import UsersPage from "./page";
 import api from "@/lib/api";
 
@@ -32,5 +32,14 @@ describe("UsersPage", () => {
     expect(createInviteMock).toHaveBeenCalled();
     expect(await screen.findByText(/copiado al portapapeles/i)).toBeInTheDocument();
     expect(writeTextMock).toHaveBeenCalledWith("https://app/sign-up?invite=abc");
+    expect(screen.getByDisplayValue("https://app/sign-up?invite=abc")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /copiar enlace/i }));
+    await waitFor(() =>
+      expect(writeTextMock).toHaveBeenLastCalledWith("https://app/sign-up?invite=abc")
+    );
+    expect(screen.getByRole("link", { name: /Abrir enlace/i })).toHaveAttribute(
+      "href",
+      "https://app/sign-up?invite=abc"
+    );
   });
 });

@@ -18,12 +18,25 @@ export default function UsersPage() {
   const displayName = titleCase("rosa");
   const [inviteStatus, setInviteStatus] = useState<string | null>(null);
   const [inviteLoading, setInviteLoading] = useState(false);
+  const [inviteLink, setInviteLink] = useState<string | null>(null);
+
+  async function copyInviteLink() {
+    if (!inviteLink) return;
+    try {
+      await navigator.clipboard.writeText(inviteLink);
+      setInviteStatus("Enlace de invitacion copiado al portapapeles.");
+    } catch {
+      setInviteStatus(`Copia este enlace manualmente: ${inviteLink}`);
+    }
+  }
 
   async function handleInvite() {
     setInviteStatus(null);
+    setInviteLink(null);
     setInviteLoading(true);
     try {
       const result = await api.createInvite();
+      setInviteLink(result.inviteLink);
       try {
         await navigator.clipboard.writeText(result.inviteLink);
         setInviteStatus("Enlace de invitacion creado y copiado al portapapeles.");
@@ -88,6 +101,35 @@ export default function UsersPage() {
               </button>
               {inviteStatus ? (
                 <p className="mt-3 text-xs text-[#1b3f7a]/70">{inviteStatus}</p>
+              ) : null}
+              {inviteLink ? (
+                <div className="mt-3 space-y-2">
+                  <label className="block text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1b3f7a]/60">
+                    Enlace para enviar
+                  </label>
+                  <input
+                    value={inviteLink}
+                    readOnly
+                    className="w-full rounded-xl border border-[#f4d3b2] bg-white px-3 py-2 text-xs text-[#12376c]"
+                  />
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={copyInviteLink}
+                      className="rounded-full border border-[#f4d3b2] bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#12376c] transition hover:-translate-y-0.5 hover:border-[#1aa1d5]"
+                    >
+                      Copiar enlace
+                    </button>
+                    <a
+                      href={inviteLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-semibold text-[#1aa1d5] hover:text-[#1693c2]"
+                    >
+                      Abrir enlace
+                    </a>
+                  </div>
+                </div>
               ) : null}
             </div>
           </div>

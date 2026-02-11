@@ -132,8 +132,8 @@ public class AuthService {
       throw new IllegalArgumentException("Invalid credentials");
     }
 
-    // Check if email is verified
-    if (!u.getEmailVerified()) {
+    // Keep legacy users working: only block when account is explicitly pending verification.
+    if (Boolean.FALSE.equals(u.getEmailVerified()) && u.getVerificationCode() != null) {
       throw new IllegalArgumentException("Email not verified. Please verify your email first.");
     }
 
