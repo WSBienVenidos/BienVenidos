@@ -1,10 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-<<<<<<< HEAD
-=======
 import type { ReactNode } from "react";
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
 import Link from "next/link";
 
 /**
@@ -16,24 +13,6 @@ import Link from "next/link";
  * TODO later (team):
  * - Replace categories with our real list if needed
  * - Wire submit to API
-<<<<<<< HEAD
- * - Translation
- */
-
-type CategoryKey =
-  | "comida"
-  | "habitacao"
-  | "assessoria_juridica"
-  | "transporte"
-  | "escola"
-  | "um_amigo"
-  | "doutor"
-  | "celular"
-  | "trabalho"
-  | "conta_bancaria"
-  | "roupas_moveis"
-  | "igreja";
-=======
  * - Traducción
  */
 
@@ -50,36 +29,14 @@ type CategoryKey =
   | "cuenta_bancaria"
   | "ropa_muebles"
   | "iglesia";
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
 
 type Category = {
   key: CategoryKey;
   title: string;
-<<<<<<< HEAD
-  subtitle?: string;
-  emoji: string; // placeholder icon
-=======
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
   tone: "orange" | "yellow" | "purple" | "blue" | "green" | "pink" | "neutral";
 };
 
 const CATEGORIES: Category[] = [
-<<<<<<< HEAD
-  { key: "comida", title: "Comida", emoji: "🍱", tone: "orange" },
-  { key: "habitacao", title: "Habitação", emoji: "🏠", tone: "yellow" },
-  { key: "assessoria_juridica", title: "Assessoria jurídica", emoji: "⚖️", tone: "purple" },
-  { key: "transporte", title: "Transporte", emoji: "🚌", tone: "blue" },
-  { key: "escola", title: "Escola", emoji: "🏫", tone: "orange" },
-  { key: "um_amigo", title: "Um amigo", emoji: "🙂", tone: "neutral" },
-  { key: "doutor", title: "Doutor", emoji: "🧰", tone: "green" },
-  { key: "celular", title: "Celular", emoji: "📱", tone: "blue" },
-  { key: "trabalho", title: "Trabalho", emoji: "💼", tone: "orange" },
-  { key: "conta_bancaria", title: "Conta bancária", emoji: "🏛️", tone: "green" },
-  { key: "roupas_moveis", title: "Roupas e móveis", emoji: "👕", tone: "blue" },
-  { key: "igreja", title: "Igreja", emoji: "⛪", tone: "pink" },
-];
-
-=======
   { key: "alimentos", title: "Alimentos", tone: "orange" },
   { key: "vivienda", title: "Vivienda", tone: "yellow" },
   { key: "asesoria_legal", title: "Asesoría legal", tone: "purple" },
@@ -507,7 +464,6 @@ const CATEGORY_ICONS: Record<CategoryKey, ReactNode> = {
   ),
 };
 
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
 function toneClasses(tone: Category["tone"]) {
   switch (tone) {
     case "orange":
@@ -570,26 +526,11 @@ function toneClasses(tone: Category["tone"]) {
 }
 
 export default function AyudaPage() {
-<<<<<<< HEAD
-  const [selected, setSelected] = useState<CategoryKey | null>(null);
-=======
   const [selected, setSelected] = useState<CategoryKey[]>([]);
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
 
   // Form state (design-only)
   const [age, setAge] = useState("");
   const [familyMembers, setFamilyMembers] = useState("");
-<<<<<<< HEAD
-  const [arrivalDate, setArrivalDate] = useState("");
-  const [details, setDetails] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  const selectedCategory = useMemo(
-    () => CATEGORIES.find(c => c.key === selected) ?? null,
-    [selected]
-  );
-
-=======
   const [sex, setSex] = useState("");
   const [nativeCountry, setNativeCountry] = useState("");
   const [speaksEnglish, setSpeaksEnglish] = useState("");
@@ -732,15 +673,12 @@ export default function AyudaPage() {
     speaksEnglish,
   ]);
 
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
   function submit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitted(true);
     // TODO (team): send to API
   }
 
-<<<<<<< HEAD
-=======
   function handleFamilyMembersChange(value: string) {
     setFamilyMembers(value);
     const count = Math.max(0, Number.parseInt(value, 10) || 0);
@@ -757,51 +695,24 @@ export default function AyudaPage() {
     });
   }
 
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
   return (
     <div className="w-full">
       {/* Top crumbs / back */}
       <div className="flex items-center justify-between">
         <div className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b3f7a]/60">
-<<<<<<< HEAD
-          Primeiro mês em Utah
-=======
           Primer mes en Utah
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
         </div>
 
         <Link
           href="/users"
           className="rounded-full border border-[#f4d3b2] bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#12376c] transition hover:-translate-y-0.5 hover:border-[#f28c28]"
         >
-<<<<<<< HEAD
-          Voltar
-=======
           Regresar
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
         </Link>
       </div>
 
       {/* Title */}
       <h1 className="mt-4 text-5xl font-semibold leading-[1.05] text-[#12376c]">
-<<<<<<< HEAD
-        Escolha o apoio de que
-        <br />
-        precisa hoje.
-      </h1>
-
-      <p className="mt-4 max-w-3xl text-base text-[#1b3f7a]/70">
-        Oito cartões essenciais em uma tábua de bento para começar com o pé direito.
-        Não solicitamos informações sobre imigração ou documentos; sua privacidade e
-        segurança são nossa prioridade.
-      </p>
-
-      {/* Bento grid */}
-      <div className="mt-10 grid gap-6 md:grid-cols-4">
-        {CATEGORIES.map(cat => {
-          const t = toneClasses(cat.tone);
-          const isSelected = selected === cat.key;
-=======
         Elige el apoyo que
         <br />
         necesitas hoy.
@@ -818,22 +729,12 @@ export default function AyudaPage() {
         {CATEGORIES.map(cat => {
           const t = toneClasses(cat.tone);
           const isSelected = selected.includes(cat.key);
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
 
           return (
             <button
               key={cat.key}
               type="button"
               onClick={() => {
-<<<<<<< HEAD
-                setSelected(cat.key);
-                setSubmitted(false);
-              }}
-              className={[
-                "group relative overflow-hidden rounded-[28px] border p-6 text-left transition",
-                "hover:-translate-y-0.5",
-                t.bg,
-=======
                 setSelected(prev =>
                   prev.includes(cat.key)
                     ? prev.filter(key => key !== cat.key)
@@ -845,38 +746,11 @@ export default function AyudaPage() {
                 "group inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] transition",
                 "hover:-translate-y-0.5",
                 "bg-white",
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
                 t.border,
                 isSelected ? "ring-4" : "ring-0",
                 isSelected ? t.ring : "ring-transparent",
               ].join(" ")}
             >
-<<<<<<< HEAD
-              <div className="flex items-start gap-4">
-                <div
-                  className={[
-                    "grid h-12 w-12 place-items-center rounded-2xl",
-                    t.chipBg,
-                  ].join(" ")}
-                >
-                  <span className={["text-2xl", t.icon].join(" ")}>{cat.emoji}</span>
-                </div>
-
-                <div className="flex-1">
-                  <div className="text-xl font-semibold text-[#12376c]">
-                    {cat.title}
-                  </div>
-                  {cat.subtitle ? (
-                    <div className="mt-1 text-sm text-[#1b3f7a]/70">
-                      {cat.subtitle}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-
-              {/* subtle highlight */}
-              <div className="pointer-events-none absolute -right-20 -top-20 h-44 w-44 rounded-full bg-white/35 blur-2xl transition group-hover:opacity-100 opacity-70" />
-=======
               <span
                 className={[
                   "grid h-8 w-8 place-items-center rounded-full",
@@ -886,7 +760,6 @@ export default function AyudaPage() {
                 {CATEGORY_ICONS[cat.key]}
               </span>
               <span className="text-[#12376c]">{cat.title}</span>
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
             </button>
           );
         })}
@@ -897,15 +770,6 @@ export default function AyudaPage() {
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b3f7a]/60">
-<<<<<<< HEAD
-              Pedido de apoio
-            </div>
-            <h2 className="mt-2 text-2xl font-semibold text-[#12376c]">
-              Conte um pouco sobre você
-            </h2>
-            <p className="mt-2 text-sm text-[#1b3f7a]/70">
-              Preencha apenas o que você se sentir confortável em compartilhar.
-=======
               Solicitud de apoyo
             </div>
             <h2 className="mt-2 text-2xl font-semibold text-[#12376c]">
@@ -913,40 +777,22 @@ export default function AyudaPage() {
             </h2>
             <p className="mt-2 text-sm text-[#1b3f7a]/70">
               Completa solo lo que te sientas cómodo compartiendo.
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
             </p>
           </div>
 
           <div className="mt-3 md:mt-0">
             <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#1b3f7a]/60">
-<<<<<<< HEAD
-              Categoria selecionada
-            </div>
-            <div className="mt-1 rounded-full border border-[#f4d3b2] bg-[#fff6ec] px-4 py-2 text-sm font-semibold text-[#12376c]">
-              {selectedCategory ? selectedCategory.title : "Nenhuma (escolha acima)"}
-=======
               Categoría seleccionada
             </div>
             <div className="mt-1 rounded-full border border-[#f4d3b2] bg-[#fff6ec] px-4 py-2 text-sm font-semibold text-[#12376c]">
               {selectedCategories.length > 0
                 ? selectedCategories.map(cat => cat.title).join(", ")
                 : "Ninguna (elige arriba)"}
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
             </div>
           </div>
         </div>
 
         <form onSubmit={submit} className="mt-8 grid gap-6">
-<<<<<<< HEAD
-          <div className="grid gap-6 md:grid-cols-3">
-            <label className="block text-sm text-[#1b3f7a]">
-              Idade
-              <input
-                value={age}
-                onChange={e => setAge(e.target.value)}
-                className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
-                placeholder="Ex: 32"
-=======
           <div className="grid gap-6 md:grid-cols-4">
             <label className="block text-sm text-[#1b3f7a]">
               Edad
@@ -955,39 +801,22 @@ export default function AyudaPage() {
                 onChange={e => setAge(e.target.value)}
                 className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-3 py-2 text-xs text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
                 placeholder="Ej: 32"
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
                 inputMode="numeric"
               />
             </label>
 
             <label className="block text-sm text-[#1b3f7a]">
-<<<<<<< HEAD
-              Membros da família (total)
-              <input
-                value={familyMembers}
-                onChange={e => setFamilyMembers(e.target.value)}
-                className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
-                placeholder="Ex: 4"
-=======
               Miembros de la familia (total)
               <input
                 value={familyMembers}
                 onChange={e => handleFamilyMembersChange(e.target.value)}
                 className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-3 py-2 text-xs text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
                 placeholder="Ej: 4"
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
                 inputMode="numeric"
               />
             </label>
 
             <label className="block text-sm text-[#1b3f7a]">
-<<<<<<< HEAD
-              Data de chegada
-              <input
-                value={arrivalDate}
-                onChange={e => setArrivalDate(e.target.value)}
-                className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
-=======
               Sexo
               <select
                 value={sex}
@@ -1008,16 +837,11 @@ export default function AyudaPage() {
                 value={arrivalDate}
                 onChange={e => setArrivalDate(e.target.value)}
                 className="mt-2 w-full rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-3 py-2 text-xs text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
                 type="date"
               />
             </label>
           </div>
 
-<<<<<<< HEAD
-          <label className="block text-sm text-[#1b3f7a]">
-            Como podemos ajudar?
-=======
           <div className="grid gap-6 md:grid-cols-4">
             <label className="block text-sm text-[#1b3f7a]">
               Ocupación
@@ -1122,20 +946,10 @@ export default function AyudaPage() {
 
           <label className="block text-sm text-[#1b3f7a]">
             ¿Cómo podemos ayudar?
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
             <textarea
               value={details}
               onChange={e => setDetails(e.target.value)}
               className="mt-2 min-h-[120px] w-full resize-y rounded-2xl border border-[#f1d0ae] bg-[#fff6ec] px-4 py-3 text-sm text-[#12376c] outline-none ring-2 ring-transparent transition focus:ring-[#1aa1d5]/40"
-<<<<<<< HEAD
-              placeholder="Descreva sua situação e o tipo de apoio que você procura..."
-            />
-          </label>
-
-          {submitted ? (
-            <div className="rounded-2xl border border-[#d3edd5] bg-[#eaf8ea] p-4 text-sm text-[#2e7d32]">
-              Pedido salvo (design-only). Quando o backend estiver pronto, aqui vamos enviar para o servidor.
-=======
               placeholder="Describe tu situación y el tipo de apoyo que buscas..."
             />
           </label>
@@ -1166,28 +980,19 @@ export default function AyudaPage() {
           {submitted ? (
             <div className="rounded-2xl border border-[#d3edd5] bg-[#eaf8ea] p-4 text-sm text-[#2e7d32]">
               Solicitud guardada (design-only). Cuando el backend esté listo, enviaremos esto al servidor.
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
             </div>
           ) : null}
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs text-[#1b3f7a]/70">
-<<<<<<< HEAD
-              Não pedimos documentos. Evite compartilhar dados sensíveis.
-=======
               No pedimos documentos. Evita compartir datos sensibles.
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
             </p>
 
             <button
               type="submit"
               className="inline-flex items-center justify-center rounded-full bg-[#1aa1d5] px-6 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-white shadow-[0_12px_30px_-18px_rgba(26,161,213,0.7)] transition hover:-translate-y-0.5 hover:bg-[#21b4e4]"
             >
-<<<<<<< HEAD
-              Enviar pedido
-=======
               Enviar solicitud
->>>>>>> 1fe4bdb4c1d449e89727a06c4333390c0280e5be
             </button>
           </div>
         </form>
