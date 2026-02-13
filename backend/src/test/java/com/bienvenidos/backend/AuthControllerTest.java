@@ -32,7 +32,7 @@ class AuthControllerTest {
     authService = mock(AuthService.class);
     jwt = mock(JwtService.class);
     users = mock(AppUserRepository.class);
-    controller = new AuthController(authService, jwt, users);
+    controller = new AuthController(authService, jwt, users, false, "Lax");
   }
 
   @Test

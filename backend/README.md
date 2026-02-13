@@ -12,10 +12,14 @@ This is a simple Spring Boot backend that stores user credentials (hashed) in Su
 1) Run the SQL to create the table:
    - `src/main/resources/db/create_tables.sql`
 2) Create a `.env` (copy from `.env.example`) and fill in your Supabase database connection values.
-3) Run:
+3) Set frontend URL variables for deployment:
+   - `FRONTEND_ORIGIN=https://bien-venidos.vercel.app`
+   - `APP_PUBLIC_BASE_URL=https://bien-venidos.vercel.app`
+     - Invite links are generated from this value.
+4) Run:
 
 ```bash
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
 ## Endpoints
