@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 import java.util.UUID;
@@ -23,11 +24,21 @@ public class AuthController {
   private final AuthService authService;
   private final JwtService jwtService;
   private final AppUserRepository users;
+  private final boolean cookieSecure;
+  private final String cookieSameSite;
 
-  public AuthController(AuthService authService, JwtService jwtService, AppUserRepository users) {
+  public AuthController(
+      AuthService authService,
+      JwtService jwtService,
+      AppUserRepository users,
+      @Value("${app.cookie.secure:false}") boolean cookieSecure,
+      @Value("${app.cookie.sameSite:Lax}") String cookieSameSite
+  ) {
     this.authService = authService;
     this.jwtService = jwtService;
     this.users = users;
+    this.cookieSecure = cookieSecure;
+    this.cookieSameSite = cookieSameSite;
   }
 
   @PostMapping("/signup")
@@ -35,10 +46,10 @@ public class AuthController {
   String token = authService.signup(req);
   ResponseCookie cookie = ResponseCookie.from("bv_token", token)
     .httpOnly(true)
-    .secure(false)
+    .secure(cookieSecure)
     .path("/")
     .maxAge(jwtService.getExpirationSeconds())
-    .sameSite("Lax")
+    .sameSite(cookieSameSite)
     .build();
 
   return ResponseEntity.ok()
@@ -51,10 +62,10 @@ public class AuthController {
   String token = authService.verifyEmail(req);
   ResponseCookie cookie = ResponseCookie.from("bv_token", token)
     .httpOnly(true)
-    .secure(false)
+    .secure(cookieSecure)
     .path("/")
     .maxAge(jwtService.getExpirationSeconds())
-    .sameSite("Lax")
+    .sameSite(cookieSameSite)
     .build();
 
   return ResponseEntity.ok()
@@ -67,10 +78,10 @@ public class AuthController {
   String token = authService.login(req);
   ResponseCookie cookie = ResponseCookie.from("bv_token", token)
     .httpOnly(true)
-    .secure(false)
+    .secure(cookieSecure)
     .path("/")
     .maxAge(jwtService.getExpirationSeconds())
-    .sameSite("Lax")
+    .sameSite(cookieSameSite)
     .build();
 
   return ResponseEntity.ok()
@@ -82,10 +93,10 @@ public class AuthController {
   public ResponseEntity<?> logout() {
   ResponseCookie cookie = ResponseCookie.from("bv_token", "")
     .httpOnly(true)
-    .secure(false)
+    .secure(cookieSecure)
     .path("/")
     .maxAge(0)
-    .sameSite("Lax")
+    .sameSite(cookieSameSite)
     .build();
   return ResponseEntity.ok().header("Set-Cookie", cookie.toString()).body(Map.of("ok", true));
   }
