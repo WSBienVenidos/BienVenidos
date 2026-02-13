@@ -1,7 +1,5 @@
 // Lightweight API helper for auth
-// Declare `process` so TypeScript in the frontend bundle does not complain.
-declare const process: { env?: { NEXT_PUBLIC_API_URL?: string } };
-const API_BASE = process?.env?.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 type TokenResponse = {
   token: string;
