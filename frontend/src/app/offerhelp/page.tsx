@@ -3,6 +3,11 @@
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import {
+  createOfferHelpMessage,
+  getOfferHelpApiMode,
+  type OfferHelpApiError,
+} from "@/lib/offerHelpApi";
 
 /**
  * OFFER HELP PAGE (design-only) WITH CATEGORY FILTER GRID instead of one page per category
@@ -595,6 +600,7 @@ function toneClasses(tone: Category["tone"]) {
 }
 
 export default function OfrecerAyudaPage() {
+  const offerHelpMode = getOfferHelpApiMode();
   const [filter, setFilter] = useState<CategoryKey | "all">("all");
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
@@ -603,6 +609,8 @@ export default function OfrecerAyudaPage() {
   const [helperContact, setHelperContact] = useState("");
   const [message, setMessage] = useState("");
   const [submittedFor, setSubmittedFor] = useState<string | null>(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const filteredPosts = useMemo(() => {
     const list = filter === "all" ? mockPosts : mockPosts.filter(p => p.category === filter);
@@ -616,19 +624,45 @@ export default function OfrecerAyudaPage() {
   function openReply(postId: string) {
     setSelectedPostId(postId);
     setSubmittedFor(null);
+    setSubmitError(null);
     setMessage("");
   }
 
   function closeReply() {
     setSelectedPostId(null);
     setSubmittedFor(null);
+    setSubmitError(null);
   }
 
-  function submitReply(e: React.FormEvent) {
+  async function submitReply(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedPostId) return;
-    setSubmittedFor(selectedPostId);
-    // TODO later (team): send to API
+    setSubmittedFor(null);
+    setSubmitError(null);
+    setSubmitLoading(true);
+
+    const selected = mockPosts.find(p => p.id === selectedPostId);
+    const categoryTitle = selected
+      ? (CATEGORIES.find(c => c.key === selected.category)?.title ?? "Sin categoria")
+      : "Sin categoria";
+
+    try {
+      await createOfferHelpMessage({
+        targetPostId: selectedPostId,
+        targetPostTitle: selected?.title,
+        targetCategory: categoryTitle,
+        helperName: helperName.trim(),
+        helperContact: helperContact.trim(),
+        message: message.trim(),
+      });
+      setSubmittedFor(selectedPostId);
+    } catch (err) {
+      const apiError = err as OfferHelpApiError;
+      const body = apiError?.body as { error?: string } | undefined;
+      setSubmitError(body?.error ?? "No se pudo guardar el mensaje de ayuda.");
+    } finally {
+      setSubmitLoading(false);
+    }
   }
 
   function categoryLabel(key: CategoryKey | "all") {
@@ -688,7 +722,7 @@ export default function OfrecerAyudaPage() {
           </button>
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {CATEGORIES.map(cat => {
             const t = toneClasses(cat.tone);
             const isSelected = filter === cat.key;
@@ -699,7 +733,7 @@ export default function OfrecerAyudaPage() {
                 type="button"
                 onClick={() => setFilter(cat.key)}
                 className={[
-                  "group inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] transition",
+                  "group inline-flex w-full items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] transition",
                   "hover:-translate-y-0.5",
                   "bg-white",
                   t.border,
@@ -888,15 +922,24 @@ export default function OfrecerAyudaPage() {
 
               {submittedFor && submittedFor === selectedPostId ? (
                 <div className="rounded-2xl border border-[#d3edd5] bg-[#eaf8ea] p-4 text-sm text-[#2e7d32]">
-                  Mensaje enviado (design-only). Más adelante conectaremos con el backend.
+                  {offerHelpMode === "api"
+                    ? "Mensaje enviado y guardado en el servidor."
+                    : "Mensaje guardado en modo mock. Backend puede conectar este flujo sin cambiar la UI."}
+                </div>
+              ) : null}
+
+              {submitError ? (
+                <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                  {submitError}
                 </div>
               ) : null}
 
               <button
                 type="submit"
+                disabled={submitLoading}
                 className="mt-2 w-full rounded-full bg-[#1aa1d5] px-6 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-white shadow-[0_12px_30px_-18px_rgba(26,161,213,0.7)] transition hover:-translate-y-0.5 hover:bg-[#21b4e4]"
               >
-                Enviar
+                {submitLoading ? "Guardando..." : "Enviar"}
               </button>
 
               <p className="text-xs text-[#1b3f7a]/65">

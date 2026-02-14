@@ -3,6 +3,12 @@
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import {
+  createNeedHelpPost,
+  getNeedHelpApiMode,
+  type NeedHelpApiError,
+  type NeedHelpPostDraft,
+} from "@/lib/needHelpApi";
 
 /**
  * NEED HELP PAGE (design-only, no API, no redirects)
@@ -542,6 +548,8 @@ export default function AyudaPage() {
   const [arrivalDate, setArrivalDate] = useState("");
   const [details, setDetails] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [useSuggestedMessage, setUseSuggestedMessage] = useState(false);
 
   const selectedCategories = useMemo(
@@ -673,10 +681,36 @@ export default function AyudaPage() {
     speaksEnglish,
   ]);
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
-    // TODO (team): send to API
+    setSubmitted(false);
+    setSubmitError(null);
+    setSubmitLoading(true);
+
+    const payload: NeedHelpPostDraft = {
+      categories: selectedCategories.map(cat => cat.key),
+      details: details.trim() || suggestedMessage,
+      age: age.trim() || undefined,
+      familyMembers: familyMembers.trim() || undefined,
+      familyDetails,
+      sex: sex || undefined,
+      nativeCountry: nativeCountry.trim() || undefined,
+      speaksEnglish: speaksEnglish || undefined,
+      occupation: occupation.trim() || undefined,
+      city: city.trim() || undefined,
+      arrivalDate: arrivalDate || undefined,
+    };
+
+    try {
+      await createNeedHelpPost(payload);
+      setSubmitted(true);
+    } catch (err) {
+      const apiError = err as NeedHelpApiError;
+      const body = apiError?.body as { error?: string } | undefined;
+      setSubmitError(body?.error ?? "No se pudo guardar la solicitud.");
+    } finally {
+      setSubmitLoading(false);
+    }
   }
 
   function handleFamilyMembersChange(value: string) {
@@ -725,7 +759,7 @@ export default function AyudaPage() {
       </p>
 
       {/* Category buttons */}
-      <div className="mt-8 flex flex-wrap gap-3">
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {CATEGORIES.map(cat => {
           const t = toneClasses(cat.tone);
           const isSelected = selected.includes(cat.key);
@@ -743,7 +777,7 @@ export default function AyudaPage() {
                 setSubmitted(false);
               }}
               className={[
-                "group inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] transition",
+                "group inline-flex w-full items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] transition",
                 "hover:-translate-y-0.5",
                 "bg-white",
                 t.border,
@@ -979,7 +1013,15 @@ export default function AyudaPage() {
 
           {submitted ? (
             <div className="rounded-2xl border border-[#d3edd5] bg-[#eaf8ea] p-4 text-sm text-[#2e7d32]">
-              Solicitud guardada (design-only). Cuando el backend esté listo, enviaremos esto al servidor.
+              {getNeedHelpApiMode() === "api"
+                ? "Solicitud guardada en el servidor."
+                : "Solicitud guardada en modo mock. Backend puede conectar este flujo sin cambiar la UI."}
+            </div>
+          ) : null}
+
+          {submitError ? (
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              {submitError}
             </div>
           ) : null}
 
@@ -990,9 +1032,10 @@ export default function AyudaPage() {
 
             <button
               type="submit"
+              disabled={submitLoading}
               className="inline-flex items-center justify-center rounded-full bg-[#1aa1d5] px-6 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-white shadow-[0_12px_30px_-18px_rgba(26,161,213,0.7)] transition hover:-translate-y-0.5 hover:bg-[#21b4e4]"
             >
-              Enviar solicitud
+              {submitLoading ? "Guardando..." : "Enviar solicitud"}
             </button>
           </div>
         </form>
