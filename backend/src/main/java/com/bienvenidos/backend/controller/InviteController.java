@@ -37,7 +37,18 @@ public class InviteController {
 
     UUID inviterId = UUID.fromString(principal.userId());
     InviteService.GeneratedInvite generated = inviteService.createInvite(inviterId);
-    String link = appPublicBaseUrl.replaceAll("/+$", "") + "/sign-up?invite=" + generated.token();
+    String rawBase = appPublicBaseUrl == null ? "" : appPublicBaseUrl.trim();
+    String base = rawBase;
+    if (rawBase.contains(",")) {
+      base = java.util.Arrays.stream(rawBase.split(","))
+          .map(String::trim)
+          .filter(s -> !s.isEmpty())
+          .filter(s -> !s.contains("localhost:3000"))
+          .findFirst()
+          .orElse("");
+    }
+    boolean useRelative = base.isEmpty() || base.contains("localhost:3000");
+    String link = (useRelative ? "" : base.replaceAll("/+$", "")) + "/sign-up?invite=" + generated.token();
 
     return ResponseEntity.ok(new AuthResponses.InviteCreateResponse(link, generated.expiresAt()));
   }
