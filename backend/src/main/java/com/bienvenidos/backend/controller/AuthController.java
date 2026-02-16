@@ -113,6 +113,12 @@ public class AuthController {
       return ResponseEntity.status(404).body(Map.of("error", "User not found"));
     }
 
-    return ResponseEntity.ok(new AuthResponses.UserResponse(u.getId(), u.getEmail(), u.getCreatedAt()));
+    return ResponseEntity.ok(new AuthResponses.UserResponse(
+        u.getId(),
+        u.getEmail(),
+        u.getFirstName(),
+        u.getLastName(),
+        u.getCreatedAt()
+    ));
   }
 }

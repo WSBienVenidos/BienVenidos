@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import api, { type ApiError } from "@/lib/api";
+import api, { type ApiError, type UserResponse } from "@/lib/api";
 import {
   getMockNeedHelpPostsSnapshot,
   getMyNeedHelpPosts,
@@ -29,8 +29,8 @@ function titleCase(s: string) {
 export default function UsersPage() {
   const needHelpMode = getNeedHelpApiMode();
   const offerHelpMode = getOfferHelpApiMode();
-  const email = "test1@gmail.com";
-  const displayName = titleCase("rosa");
+  const [user, setUser] = useState<UserResponse | null>(null);
+  const [userLoading, setUserLoading] = useState(true);
   const [inviteStatus, setInviteStatus] = useState<string | null>(null);
   const [inviteLoading, setInviteLoading] = useState(false);
   const [inviteLink, setInviteLink] = useState<string | null>(null);
@@ -43,6 +43,31 @@ export default function UsersPage() {
   const [offerMessagesLoading, setOfferMessagesLoading] = useState(false);
   const [offerMessagesError, setOfferMessagesError] = useState<string | null>(null);
   const [offerMessageCounts, setOfferMessageCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    let active = true;
+    api.me()
+      .then(result => {
+        if (!active) return;
+        setUser(result);
+      })
+      .catch(() => {
+        if (!active) return;
+        setUser(null);
+      })
+      .finally(() => {
+        if (!active) return;
+        setUserLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const email = user?.email ?? "";
+  const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ").trim();
+  const fallbackName = user?.email ? user.email.split("@")[0] : "amigo";
+  const displayName = userLoading ? "..." : titleCase(fullName || fallbackName);
 
   useEffect(() => {
     let active = true;
@@ -184,15 +209,6 @@ export default function UsersPage() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-end gap-3">
-        <div className="text-sm text-[#1b3f7a]/70">{email}</div>
-        <button
-          type="button"
-          className="rounded-lg border border-[#f4d3b2] bg-white px-3 py-2 text-sm font-semibold text-[#12376c] transition hover:-translate-y-0.5 hover:border-[#f28c28]"
-        >
-          Salir
-        </button>
-      </div>
 
       <div className="mt-6 overflow-hidden rounded-[28px] border border-[#f4d3b2] bg-white shadow-[0_25px_80px_-55px_rgba(26,161,213,0.35)]">
         <div className="relative p-8">
@@ -268,13 +284,6 @@ export default function UsersPage() {
 
       <div className="mt-10 flex items-center justify-between">
         <h2 className="text-xl font-semibold text-[#12376c]">Que te gustaria hacer hoy?</h2>
-        <button
-          type="button"
-          className="grid h-10 w-10 place-items-center rounded-full border border-[#f4d3b2] bg-white text-[#12376c] transition hover:-translate-y-0.5 hover:border-[#f28c28]"
-          aria-label="Siguiente"
-        >
-          {">"}
-        </button>
       </div>
 
       <div className="mt-6 grid gap-6 md:grid-cols-2">

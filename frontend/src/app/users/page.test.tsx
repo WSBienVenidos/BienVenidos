@@ -6,16 +6,34 @@ jest.mock("@/lib/api", () => ({
   __esModule: true,
   default: {
     createInvite: jest.fn(),
+    me: jest.fn(),
   },
 }));
 
 describe("UsersPage", () => {
-  it("renders the welcome message with title-cased name", () => {
+  it("renders the welcome message with title-cased name", async () => {
+    const meMock = jest.mocked(api.me);
+    meMock.mockResolvedValue({
+      id: "1",
+      email: "rosa@example.com",
+      firstName: "rosa",
+      lastName: "lopez",
+      createdAt: "today",
+    });
+
     render(<UsersPage />);
-    expect(screen.getByText(/Bienvenido, Rosa\./)).toBeInTheDocument();
+    expect(await screen.findByText(/Bienvenido, Rosa Lopez\./)).toBeInTheDocument();
   });
 
   it("calls invite API and shows success message", async () => {
+    const meMock = jest.mocked(api.me);
+    meMock.mockResolvedValue({
+      id: "1",
+      email: "rosa@example.com",
+      firstName: "rosa",
+      lastName: "lopez",
+      createdAt: "today",
+    });
     const createInviteMock = jest.mocked(api.createInvite);
     createInviteMock.mockResolvedValue({
       inviteLink: "https://app/sign-up?invite=abc",

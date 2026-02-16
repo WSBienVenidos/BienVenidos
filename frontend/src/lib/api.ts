@@ -16,9 +16,11 @@ type SignupPayload = {
   inviteToken?: string;
 };
 
-type UserResponse = {
+export type UserResponse = {
   id: string;
   email: string;
+  firstName?: string | null;
+  lastName?: string | null;
   createdAt: string;
 };
 
@@ -41,13 +43,33 @@ type InviteValidationResponse = {
   reason: string;
 };
 
+const DEFAULT_TIMEOUT_MS = 15000;
+
+async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, timeoutMs = DEFAULT_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(input, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(id);
+  }
+}
+
 async function postJson<T>(path: string, body: unknown, useCredentials = true): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    credentials: useCredentials ? "include" : "same-origin",
-  });
+  let res: Response;
+  try {
+    res = await fetchWithTimeout(`${API_BASE}${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      credentials: useCredentials ? "include" : "same-origin",
+    });
+  } catch (err) {
+    const message = err instanceof DOMException && err.name === "AbortError"
+      ? "Request timed out"
+      : "Network error";
+    throw { status: 0, body: { error: message } } as ApiError;
+  }
   const text = await res.text();
   let json: unknown = null;
   try {
