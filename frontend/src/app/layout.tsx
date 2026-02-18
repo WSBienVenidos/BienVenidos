@@ -49,9 +49,18 @@ export default function RootLayout({
           </div>
           <footer className="relative mt-auto border-t border-[#f4d3b2] bg-white py-8 text-sm text-[#1b3f7a]/70">
             <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row sm:items-center">
-              <span className="text-center text-xs font-medium text-[#1b3f7a]/60 sm:text-left">
-                © 2026 BienVenidos. Todos los derechos reservados.
-              </span>
+              <div className="text-center text-xs font-medium text-[#1b3f7a]/60 sm:text-left">
+                <p>© 2026 BienVenidos. Todos los derechos reservados.</p>
+                <p className="mt-2">
+                  Proudly developed by:{" "}
+                  <a className="underline hover:text-[#12376c]" href="https://www.linkedin.com/in/angelacieslak" target="_blank" rel="noreferrer">Angela Cieslak</a>,{" "}
+                  <a className="underline hover:text-[#12376c]" href="https://www.linkedin.com/in/ruan-meneguello-61a567b3/" target="_blank" rel="noreferrer">Ruan Meneguello</a>,{" "}
+                  <a className="underline hover:text-[#12376c]" href="https://www.linkedin.com/in/thomasnixonneves/" target="_blank" rel="noreferrer">Thomas Nixon</a>,{" "}
+                  <a className="underline hover:text-[#12376c]" href="https://www.linkedin.com/in/juliolemosacc/" target="_blank" rel="noreferrer">Julio Lemos</a>{" "}
+                  and{" "}
+                  <a className="underline hover:text-[#12376c]" href="https://www.linkedin.com/in/eliam-mputu/" target="_blank" rel="noreferrer">Eliam Mputu</a>.
+                </p>
+              </div>
               <div className="relative flex flex-col items-center gap-2 text-center sm:items-end sm:text-right">
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#1b3f7a]/50">
                   Confianza
