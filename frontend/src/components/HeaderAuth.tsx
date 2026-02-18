@@ -6,11 +6,10 @@ import Link from "next/link";
 
 export default function HeaderAuth() {
   const [user, setUser] = useState<{ email?: string } | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
-    api.me().then(u => { if (mounted) setUser(u); }).catch(() => { if (mounted) setUser(null); }).finally(() => { if (mounted) setLoading(false); });
+    api.me().then(u => { if (mounted) setUser(u); }).catch(() => { if (mounted) setUser(null); });
     return () => { mounted = false; };
   }, []);
 
@@ -21,12 +20,10 @@ export default function HeaderAuth() {
     window.location.href = '/';
   }
 
-  if (loading) return null;
-
   if (!user) {
     return (
       <div className="flex items-center gap-4">
-        <Link className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1b3f7a] transition hover:text-[#0f2d57]" href="/login">Iniciar sesión</Link>
+        <Link className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1b3f7a] transition hover:text-[#0f2d57]" href="/login">Conectar-se</Link>
       </div>
     );
   }

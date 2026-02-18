@@ -43,7 +43,7 @@ type InviteValidationResponse = {
   reason: string;
 };
 
-const DEFAULT_TIMEOUT_MS = 15000;
+const DEFAULT_TIMEOUT_MS = 45000;
 
 async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, timeoutMs = DEFAULT_TIMEOUT_MS) {
   const controller = new AbortController();
@@ -66,7 +66,7 @@ async function postJson<T>(path: string, body: unknown, useCredentials = true): 
     });
   } catch (err) {
     const message = err instanceof DOMException && err.name === "AbortError"
-      ? "Request timed out"
+      ? "Request timed out. The backend may be waking up, please try again."
       : "Network error";
     throw { status: 0, body: { error: message } } as ApiError;
   }

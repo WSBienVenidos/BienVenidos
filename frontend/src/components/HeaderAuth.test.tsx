@@ -24,7 +24,7 @@ describe("HeaderAuth", () => {
     render(<HeaderAuth />);
 
     await waitFor(() => {
-      expect(screen.getByText("Iniciar sesión")).toBeInTheDocument();
+      expect(screen.getByText("Conectar-se")).toBeInTheDocument();
     });
   });
 

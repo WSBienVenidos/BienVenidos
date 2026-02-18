@@ -65,9 +65,9 @@ export default function UsersPage() {
   }, []);
 
   const email = user?.email ?? "";
-  const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ").trim();
+  const firstName = user?.firstName?.trim() ?? "";
   const fallbackName = user?.email ? user.email.split("@")[0] : "amigo";
-  const displayName = userLoading ? "..." : titleCase(fullName || fallbackName);
+  const displayName = userLoading ? "..." : titleCase(firstName || fallbackName);
 
   useEffect(() => {
     let active = true;

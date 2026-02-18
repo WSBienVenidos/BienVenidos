@@ -11,7 +11,7 @@ jest.mock("@/lib/api", () => ({
 }));
 
 describe("UsersPage", () => {
-  it("renders the welcome message with title-cased name", async () => {
+  it("renders the welcome message with title-cased first name", async () => {
     const meMock = jest.mocked(api.me);
     meMock.mockResolvedValue({
       id: "1",
@@ -22,7 +22,7 @@ describe("UsersPage", () => {
     });
 
     render(<UsersPage />);
-    expect(await screen.findByText(/Bienvenido, Rosa Lopez\./)).toBeInTheDocument();
+    expect(await screen.findByText(/Bienvenido, Rosa\./)).toBeInTheDocument();
   });
 
   it("calls invite API and shows success message", async () => {
